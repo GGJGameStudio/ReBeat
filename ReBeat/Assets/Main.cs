@@ -13,10 +13,13 @@ public class Main : MonoBehaviour {
             {
                 Vector3 pos = new Vector3(i, j, 0) * 0.32f;
                 Instantiate(Resources.Load("blanc"), pos, Quaternion.identity);
+
             }
         }
+
         
 
+        JSONParser.Parse(((TextAsset)Resources.Load("Worlds/1/Set_1")).text);
         
         
 
