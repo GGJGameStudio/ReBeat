@@ -92,26 +92,30 @@ public class Main : MonoBehaviour {
             for (int j = 0; j < ApplicationModel.Mapset.Levels[ApplicationModel.Level-1].Environment.GetLength(1); j++)
             {
                 Vector3 pos = new Position(i, j).ToWorldPos(tilesize, mapsize);
+                GameObject obj = null;
                 switch (ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Environment[i, j].Type)
                 {
                     case TileType.Blank:
-                        Instantiate(Resources.Load("blanc"), pos, Quaternion.identity);
+                        obj = (GameObject) Instantiate(Resources.Load("blanc"), pos, Quaternion.identity);
                         break;
                     case TileType.Wall:
-                        Instantiate(Resources.Load("wall"), pos, Quaternion.identity);
+                        obj = (GameObject) Instantiate(Resources.Load("wall"), pos, Quaternion.identity);
                         break;
                     default:
                         break;
                 }
-                
+                ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Environment[i, j].GameObject = obj;
+
+                obj = null;
                 switch (ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Collectibles[i, j].Type)
                 {
                     case CollectibleType.Coin:
-                        Instantiate(Resources.Load("coin"), pos, Quaternion.identity);
+                        obj = (GameObject) Instantiate(Resources.Load("coin"), pos, Quaternion.identity);
                         break;
                     default:
                         break;
                 }
+                ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Collectibles[i, j].GameObject = obj;
             }
         }
 
@@ -196,7 +200,8 @@ public class Main : MonoBehaviour {
                 if (ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Collectibles[nextPos.X, nextPos.Y].Type == CollectibleType.Coin)
                 {
                     score += 10;
-                    //ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Collectibles[nextPos.X, nextPos.Y].Type = CollectibleType.Nothing;
+                    ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Collectibles[nextPos.X, nextPos.Y].Type = CollectibleType.Nothing;
+                    Destroy(ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Collectibles[nextPos.X, nextPos.Y].GameObject);
                 }
             }
         }
