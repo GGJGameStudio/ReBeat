@@ -13,9 +13,12 @@ public class Main : MonoBehaviour {
     private float leveltime = 6;
 
     private GameObject player;
+    private Position teleportPreviousPosition;
     private Position playerPos;
     private Position nextPos;
     private Direction playerDir;
+
+    private bool walking = true;
 
     private float moveTimer = 0;
     private float levelTimer = 0;
@@ -80,8 +83,10 @@ public class Main : MonoBehaviour {
 
         startPos = new Position(startPos);
         playerPos = new Position(startPos);
+        teleportPreviousPosition = new Position(startPos);
         playerDir = startDir;
         nextPos = playerPos.Add(Position.DirToPos(playerDir));
+        walking = true;
 
         Vector3 playerstartpos = startPos.ToWorldPos(tilesize, mapsize);
         player = (GameObject) Instantiate(Resources.Load("sprite-triangle"), playerstartpos, Quaternion.identity);
@@ -157,6 +162,7 @@ public class Main : MonoBehaviour {
         if (moveTimer > 1)
         {
             playerPos = nextPos;
+            teleportPreviousPosition = playerPos;
             moveTimer = moveTimer - 1;
 
             int currentTimeSlot = Mathf.FloorToInt(levelTimer);
@@ -174,6 +180,25 @@ public class Main : MonoBehaviour {
                         case LevelMechanic.TurnLeft:
                             playerDir = Position.turnLeft(playerDir);
                             break;
+                        case LevelMechanic.SlideLeft:
+                            playerPos = Position.TeleportLeft(playerPos, playerDir, 3);
+                            playerPos = checkTeleportPosition(playerPos, Position.turnLeft(playerDir));
+                            break;
+                        case LevelMechanic.SlideRight:
+                            playerPos = Position.TeleportRight(playerPos, playerDir, 3);
+                            playerPos = checkTeleportPosition(playerPos, Position.turnRight(playerDir));
+                            break;
+                        case LevelMechanic.TeleportFwd:
+                            playerPos = Position.TeleportFwd(playerPos, playerDir, 3);
+                            playerPos = checkTeleportPosition(playerPos, playerDir);
+                            break;
+                        case LevelMechanic.TeleportBwd:
+                            playerPos = Position.TeleportBwd(playerPos, playerDir, 3);
+                            playerPos = checkTeleportPosition(playerPos, Position.turnLeft(Position.turnLeft(playerDir)));
+                            break;
+                        case LevelMechanic.StartStop:
+                            walking = !walking;
+                            break;
                         default:
                             break;
                     }
@@ -190,7 +215,7 @@ public class Main : MonoBehaviour {
             }
 
             nextPos = playerPos.Add(Position.DirToPos(playerDir));
-            if (ApplicationModel.Mapset.Levels[ApplicationModel.Level-1].Environment[nextPos.X, nextPos.Y].Type == TileType.Wall)
+            if (!walking || ApplicationModel.Mapset.Levels[ApplicationModel.Level-1].Environment[nextPos.X, nextPos.Y].Type == TileType.Wall)
             {
                 nextPos = playerPos;
             }
@@ -208,7 +233,6 @@ public class Main : MonoBehaviour {
                 o.SetActive(true);
             }
         }
-
         int i = 0;
         foreach (GameObject o in timelineinputobjects)
         {
@@ -217,7 +241,7 @@ public class Main : MonoBehaviour {
             {
                 o.SetActive(false);
             }
-            else if (ApplicationModel.Inputs[ApplicationModel.Level - 1].Contains(i) && o.transform.position.x < new Position(mapsize/4, 0).ToWorldPos(tilesize, mapsize).x)
+            else if (ApplicationModel.Inputs[ApplicationModel.Level - 1].Contains(i) && o.transform.position.x < new Position(mapsize / 4, 0).ToWorldPos(tilesize, mapsize).x)
             {
                 o.SetActive(true);
             }
@@ -229,7 +253,7 @@ public class Main : MonoBehaviour {
         if (levelTimer > leveltime * speed)
         {
             ApplicationModel.Level++;
-            if (ApplicationModel.Level > 2)
+            if (ApplicationModel.Level > ApplicationModel.Mapset.Levels.Length)
             {
                 ApplicationModel.Level = 1;
                 ApplicationModel.Inputs.Clear();
@@ -238,6 +262,28 @@ public class Main : MonoBehaviour {
         }
     }
 
+    private Position checkTeleportPosition(Position position, Direction dir)
+    {
+        BaseEnvironment[,] env = ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Environment;
+        bool stop = false;
+        Position newPosition = getRelativePosition(position);
+        while (!stop)
+        {
+            if (env[newPosition.X, newPosition.Y].Type != TileType.Wall)
+                stop = true;
+            else
+                newPosition = getRelativePosition(newPosition.Add(Position.DirToPos(dir).Multiply(-1)));
+        }
+
+        return newPosition;
+    }
+
+    private Position getRelativePosition(Position position)
+    {
+        BaseEnvironment[,] env = ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Environment;
+        return new Position((position.X + env.GetLength(0)) % env.GetLength(0), (position.Y + env.GetLength(1)) % env.GetLength(1));
+    }
+        
     private void updateRotation()
     {
         player.transform.rotation = Quaternion.Lerp(player.transform.rotation, Position.DirToRot(playerDir), 0.2f);

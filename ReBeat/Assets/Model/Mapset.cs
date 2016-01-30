@@ -48,7 +48,8 @@ namespace Assets.Model
         SlideRight,
         SlideLeft,
         TeleportFwd,
-        TeleportBwd
+        TeleportBwd,
+        StartStop
     }
 
     public class TileSet

@@ -93,6 +93,7 @@ namespace Assets.Model
                         case "SlideL": mech = LevelMechanic.SlideLeft; break;
                         case "TeleF": mech = LevelMechanic.TeleportFwd; break;
                         case "TeleB": mech = LevelMechanic.TeleportBwd; break;
+                        case "Stop": mech = LevelMechanic.StartStop; break;
                         default: mech = LevelMechanic.None; break;
                     }
                     lvl.Mechanic = mech;

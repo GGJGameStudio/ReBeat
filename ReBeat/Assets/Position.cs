@@ -27,6 +27,11 @@ class Position
         return new Position(this.X + p.X, this.Y + p.Y);
     }
 
+    public Position Multiply(int i)
+    {
+        return new Position(this.X * i, this.Y * i);
+    }
+
     public Vector3 ToWorldPos(int tilesize, int mapsize)
     {
         return new Vector3(-mapsize / 2 + X, -mapsize / 2 + Y, 0) * tilesize / 100;
@@ -86,6 +91,26 @@ class Position
         }
     }
 
+    public static Position TeleportLeft(Position initialPosition, Direction direction, int tileCount)
+    {
+        return DirToPos(turnLeft(direction)).Multiply(tileCount).Add(initialPosition);
+    }
+
+    public static Position TeleportRight(Position initialPosition, Direction direction, int tileCount)
+    {
+        return DirToPos(turnRight(direction)).Multiply(tileCount).Add(initialPosition);
+    }
+
+    public static Position TeleportFwd(Position initialPosition, Direction direction, int tileCount)
+    {
+        return DirToPos(direction).Multiply(tileCount).Add(initialPosition);
+    }
+
+    public static Position TeleportBwd(Position initialPosition, Direction direction, int tileCount)
+    {
+        return DirToPos(direction).Multiply(-tileCount).Add(initialPosition);
+    }
+
     public static Quaternion DirToRot(Direction dir)
     {
         Quaternion rotation = Quaternion.identity;
@@ -109,4 +134,9 @@ class Position
 
         return rotation;
     }
+
+
+
+
+
 }
