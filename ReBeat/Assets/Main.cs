@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using SimpleJSON;
+using Assets.Model;
 
 public class Main : MonoBehaviour {
 
@@ -13,7 +15,12 @@ public class Main : MonoBehaviour {
                 Instantiate(Resources.Load("blanc"), pos, Quaternion.identity);
             }
         }
-	}
+        
+
+        
+        
+
+    }
 	
 	// Update is called once per frame
 	void Update () {

@@ -5,8 +5,17 @@ using System.Text;
 
 namespace Assets.Model
 {
-    class BaseCollectible
+    public class BaseCollectible
     {
+        public CollectibleType Type;
+        public String UnityResource;
+        public int Id;
+    }
 
+    public enum CollectibleType
+    {
+        Coin,
+        BigCoin,
+        Malus
     }
 }
