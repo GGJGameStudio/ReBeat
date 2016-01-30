@@ -190,19 +190,17 @@ public class Main : MonoBehaviour {
                 level++;
             }
 
+            if (ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Collectibles[nextPos.X, nextPos.Y].Type == CollectibleType.Coin)
+            {
+                score += 10;
+                ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Collectibles[nextPos.X, nextPos.Y].Type = CollectibleType.Nothing;
+                Destroy(ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Collectibles[nextPos.X, nextPos.Y].GameObject);
+            }
 
             nextPos = playerPos.Add(Position.DirToPos(playerDir));
             if (ApplicationModel.Mapset.Levels[ApplicationModel.Level-1].Environment[nextPos.X, nextPos.Y].Type == TileType.Wall)
             {
                 nextPos = playerPos;
-            } else
-            {
-                if (ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Collectibles[nextPos.X, nextPos.Y].Type == CollectibleType.Coin)
-                {
-                    score += 10;
-                    ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Collectibles[nextPos.X, nextPos.Y].Type = CollectibleType.Nothing;
-                    Destroy(ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Collectibles[nextPos.X, nextPos.Y].GameObject);
-                }
             }
         }
 
