@@ -10,6 +10,7 @@ public class Main : MonoBehaviour {
     private int mapsize = 20;
     private int tilesize = 32;
     private float speed = 8;
+    private float leveltime = 5;
     private Position startPos = new Position(1, 5);
     private Direction startDir = Direction.Right;
 
@@ -21,7 +22,11 @@ public class Main : MonoBehaviour {
     private float moveTimer = 0;
     private float levelTimer = 0;
 
+    private GameObject time;
+    private GameObject timeBase;
+    private List<GameObject> timelineobjects = new List<GameObject>();
 
+    public int score = 0;
 
 
     // Use this for initialization
@@ -30,23 +35,71 @@ public class Main : MonoBehaviour {
         //charger map
         if (ApplicationModel.Level == 1)
         {
-            //TODO
-        }
+            ApplicationModel.Mapset = new Mapset();
+            ApplicationModel.Mapset.Levels = new Level[2];
+            for (int lvl = 0; lvl < ApplicationModel.Mapset.Levels.Length; lvl++)
+            {
+                ApplicationModel.Mapset.Levels[lvl] = new Level();
+                ApplicationModel.Mapset.Levels[lvl].Environment = new BaseTile[mapsize, mapsize];
+                ApplicationModel.Mapset.Levels[lvl].Collectibles = new BaseCollectible[mapsize, mapsize];
 
+                for (int i = 0; i < mapsize; i++)
+                {
+                    for (int j = 0; j < mapsize; j++)
+                    {
+                        ApplicationModel.Mapset.Levels[lvl].Environment[i, j] = new BaseTile();
+                        ApplicationModel.Mapset.Levels[lvl].Collectibles[i, j] = new BaseCollectible();
+                        Vector3 pos = new Position(i, j).ToWorldPos(tilesize, mapsize);
+                        if (i == 0 || j == 0 || i == mapsize - 1 || j == mapsize - 1)
+                        {
+                            ApplicationModel.Mapset.Levels[lvl].Environment[i, j].Type = TileType.Wall;
+                        }
+                        else
+                        {
+                            ApplicationModel.Mapset.Levels[lvl].Environment[i, j].Type = TileType.Blank;
+                        }
+
+                        if (i % 5 == 1 && j % 5 == 1)
+                        {
+                            ApplicationModel.Mapset.Levels[lvl].Collectibles[i, j].Type = CollectibleType.Coin;
+                        }
+                        else
+                        {
+                            ApplicationModel.Mapset.Levels[lvl].Collectibles[i, j].Type = CollectibleType.BigCoin;
+                        }
+
+
+                    }
+                }
+            }
+        }
+        
         ApplicationModel.Inputs.Add(new List<int>());
 
-
-        for (int i = 0; i < mapsize; i++)
+        for (int i = 0; i < ApplicationModel.Mapset.Levels[ApplicationModel.Level-1].Environment.GetLength(0); i++)
         {
-            for (int j = 0; j < mapsize; j++)
+            for (int j = 0; j < ApplicationModel.Mapset.Levels[ApplicationModel.Level-1].Environment.GetLength(1); j++)
             {
                 Vector3 pos = new Position(i, j).ToWorldPos(tilesize, mapsize);
-                if (i == 0 || j == 0 || i == mapsize - 1 || j == mapsize - 1)
+                switch (ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Environment[i, j].Type)
                 {
-                    Instantiate(Resources.Load("wall"), pos, Quaternion.identity);
-                } else
+                    case TileType.Blank:
+                        Instantiate(Resources.Load("blanc"), pos, Quaternion.identity);
+                        break;
+                    case TileType.Wall:
+                        Instantiate(Resources.Load("wall"), pos, Quaternion.identity);
+                        break;
+                    default:
+                        break;
+                }
+
+                switch (ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Collectibles[i, j].Type)
                 {
-                    Instantiate(Resources.Load("blanc"), pos, Quaternion.identity);
+                    case CollectibleType.Coin:
+                        Instantiate(Resources.Load("coin"), pos, Quaternion.identity);
+                        break;
+                    default:
+                        break;
                 }
             }
         }
@@ -57,10 +110,34 @@ public class Main : MonoBehaviour {
         nextPos = playerPos.Add(Position.DirToPos(playerDir));
 
         Vector3 playerstartpos = startPos.ToWorldPos(tilesize, mapsize);
-        player = (GameObject) Instantiate(Resources.Load("perso"), playerstartpos, Quaternion.identity);
+        player = (GameObject) Instantiate(Resources.Load("sprite-triangle"), playerstartpos, Quaternion.identity);
+        player.transform.localScale = new Vector3(0.3f, 0.3f, 1);
 
         Vector3 coinpos = new Position(1, 1).ToWorldPos(tilesize, mapsize);
         Instantiate(Resources.Load("coin"), coinpos, Quaternion.identity);
+
+        var ui = new GameObject();
+
+        Vector3 timelinepos = new Position(mapsize / 2, -2).ToWorldPos(tilesize, mapsize);
+        var timeline = (GameObject)Instantiate(Resources.Load("blanc"), timelinepos, Quaternion.identity);
+        timeline.transform.localScale = new Vector3(mapsize, 1, 1);
+        //timeline.transform.Translate(new Vector3(-0.5f * tilesize / 100, 0, 0));
+        timeline.transform.parent = ui.transform;
+
+        Vector3 timepos = new Position(0, -2).ToWorldPos(tilesize, mapsize);
+        time = (GameObject)Instantiate(Resources.Load("wall"), timepos, Quaternion.identity);
+        time.transform.localScale = new Vector3(0.1f, 1, 1);
+        //time.transform.Translate(new Vector3(-0.5f * tilesize / 100, 0, 0));
+        time.transform.parent = ui.transform;
+
+        timeBase = new GameObject();
+        timeBase.transform.position = new Vector3(time.transform.position.x, time.transform.position.y, time.transform.position.z);
+        timeBase.transform.parent = ui.transform;
+
+        ui.transform.position = new Vector3(-0.5f * tilesize / 100, 0, 0);
+
+
+
 
     }
 	
@@ -105,9 +182,20 @@ public class Main : MonoBehaviour {
 
 
             nextPos = playerPos.Add(Position.DirToPos(playerDir));
+            if (ApplicationModel.Mapset.Levels[ApplicationModel.Level-1].Environment[nextPos.X, nextPos.Y].Type == TileType.Wall)
+            {
+                nextPos = playerPos;
+            } else
+            {
+                if (ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Collectibles[nextPos.X, nextPos.Y].Type == CollectibleType.Coin)
+                {
+                    score += 10;
+                    ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Collectibles[nextPos.X, nextPos.Y] = null;
+                }
+            }
         }
 
-        if (levelTimer > 40)
+        if (levelTimer > leveltime * speed)
         {
             ApplicationModel.Level++;
             if (ApplicationModel.Level > 2)
@@ -118,6 +206,28 @@ public class Main : MonoBehaviour {
             SceneManager.LoadScene(0);
         }
 
+
+        updateTimeLine(levelTimer);
     }
-    
+
+    private void updateTimeLine(float levelTimer)
+    {
+        timelineobjects.ForEach(o => GameObject.Destroy(o));
+        timelineobjects.Clear();
+
+        time.transform.position = Vector3.Lerp(timeBase.transform.position, new Vector3(timeBase.transform.position.x + mapsize * tilesize / 100f, timeBase.transform.position.y, 0), levelTimer / (leveltime * speed));
+        
+        foreach (List<int> levelinputs in ApplicationModel.Inputs)
+        {
+            foreach (int input in levelinputs)
+            {
+                var timelineobjectpos = Vector3.Lerp(timeBase.transform.position, new Vector3(timeBase.transform.position.x + mapsize * tilesize / 100f, timeBase.transform.position.y, 0), input / (leveltime * speed));
+                GameObject timelineobject = (GameObject)Instantiate(Resources.Load("perso"), timelineobjectpos, Quaternion.identity);
+                timelineobject.transform.localScale = new Vector3(0.2f, 1, 1);
+                timelineobjects.Add(timelineobject);
+            } 
+        }
+
+        
+    }
 }

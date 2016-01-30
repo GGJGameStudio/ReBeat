@@ -14,7 +14,7 @@ namespace Assets.Model
 
     public class Level
     {
-        BaseTile[,] Environment;
-        BaseCollectible[,] Collectibles;
+        public BaseTile[,] Environment;
+        public BaseCollectible[,] Collectibles;
     }
 }
