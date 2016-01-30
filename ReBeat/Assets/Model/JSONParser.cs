@@ -27,12 +27,12 @@ namespace Assets.Model
                 int baseGuid = tilesetJson["firstgid"].AsInt;
                 String tilesetName = tilesetJson["name"].Value;
 
-                JSONClass properties = tilesetJson["tileproperties"].AsObject;
+                JSONClass properties = tilesetJson["tiles"].AsObject;
 
                 foreach (String key in properties.GetKeys())
                 {
                     int guid = baseGuid + Int32.Parse(key);
-                    String unityResource = properties[key]["UnityResource"].Value;
+                    String image = properties[key]["image"].Value;
                     BaseTile tile;
                     if (tilesetName == "Env")
                     {
@@ -46,7 +46,7 @@ namespace Assets.Model
                     }
 
                     tile.Id = guid;
-                    tile.UnityResource = unityResource;
+                    tile.UnityResource = image.Substring(image.LastIndexOf("/")+1).Replace(".png","");
                     tile.initTileType();
                 }
             }

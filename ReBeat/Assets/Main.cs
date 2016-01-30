@@ -8,9 +8,9 @@ using Assets.Model;
 public class Main : MonoBehaviour {
 
     private int mapsize = 10;
-    private int tilesize = 32;
+    private int tilesize = 144;
     private float speed = 6;
-    private float leveltime = 3;
+    private float leveltime = 42;
 
     private GameObject player;
     private Position teleportPreviousPosition;
@@ -54,7 +54,7 @@ public class Main : MonoBehaviour {
             {
                 Vector3 pos = new Position(i, j).ToWorldPos(tilesize, mapsize);
                 GameObject obj = null;
-                switch (ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Environment[i, j].Type)
+                /*switch (ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Environment[i, j].Type)
                 {
                     case TileType.Blank:
                         obj = (GameObject) Instantiate(Resources.Load("blanc"), pos, Quaternion.identity);
@@ -64,7 +64,10 @@ public class Main : MonoBehaviour {
                         break;
                     default:
                         break;
-                }
+                }*/
+                string envTex = "Environment/Prefabs/" + ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Environment[i, j].UnityResource;
+
+                obj = (GameObject)Instantiate(Resources.Load(envTex), pos, Quaternion.identity);
                 ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Environment[i, j].GameObject = obj;
 
                 obj = null;
@@ -89,7 +92,6 @@ public class Main : MonoBehaviour {
 
         Vector3 playerstartpos = startPos.ToWorldPos(tilesize, mapsize);
         player = (GameObject) Instantiate(Resources.Load("sprite-triangle"), playerstartpos, Quaternion.identity);
-        player.transform.localScale = new Vector3(0.3f, 0.3f, 1);
 
         for (int l = 0; l < ApplicationModel.Level; l++)
         {
