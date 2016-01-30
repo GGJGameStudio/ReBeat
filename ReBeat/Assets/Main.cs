@@ -9,8 +9,8 @@ public class Main : MonoBehaviour {
 
     private int mapsize = 10;
     private int tilesize = 32;
-    private float speed = 8;
-    private float leveltime = 5;
+    private float speed = 6;
+    private float leveltime = 3;
 
     private GameObject player;
     private Position playerPos;
@@ -19,9 +19,6 @@ public class Main : MonoBehaviour {
 
     private float moveTimer = 0;
     private float levelTimer = 0;
-
-    private GameObject time;
-    private GameObject timeBase;
     private List<GameObject> timelineobjects = new List<GameObject>();
 
     public int score = 0;
@@ -33,45 +30,6 @@ public class Main : MonoBehaviour {
         //charger map
         if (ApplicationModel.Level == 1)
         {
-            /*ApplicationModel.Mapset = new Mapset();
-            ApplicationModel.Mapset.Levels = new Level[2];
-            for (int lvl = 0; lvl < ApplicationModel.Mapset.Levels.Length; lvl++)
-            {
-                ApplicationModel.Mapset.Levels[lvl] = new Level();
-                ApplicationModel.Mapset.Levels[lvl].Environment = new BaseTile[mapsize, mapsize];
-                ApplicationModel.Mapset.Levels[lvl].Collectibles = new BaseCollectible[mapsize, mapsize];
-
-                for (int i = 0; i < mapsize; i++)
-                {
-                    for (int j = 0; j < mapsize; j++)
-                    {
-                        ApplicationModel.Mapset.Levels[lvl].Environment[i, j] = new BaseTile();
-                        ApplicationModel.Mapset.Levels[lvl].Collectibles[i, j] = new BaseCollectible();
-                        Vector3 pos = new Position(i, j).ToWorldPos(tilesize, mapsize);
-                        if (i == 0 || j == 0 || i == mapsize - 1 || j == mapsize - 1)
-                        {
-                            ApplicationModel.Mapset.Levels[lvl].Environment[i, j].Type = TileType.Wall;
-                        }
-                        else
-                        {
-                            ApplicationModel.Mapset.Levels[lvl].Environment[i, j].Type = TileType.Blank;
-                        }
-
-                        if (i % 5 == 1 && j % 5 == 1)
-                        {
-                            ApplicationModel.Mapset.Levels[lvl].Collectibles[i, j].Type = CollectibleType.Coin;
-                        }
-                        else
-                        {
-                            ApplicationModel.Mapset.Levels[lvl].Collectibles[i, j].Type = CollectibleType.BigCoin;
-                        }
-
-
-                    }
-                }
-                Vector3 pos = new Vector3(i, j, 0) * 0.32f;
-                Instantiate(Resources.Load("blanc"), pos, Quaternion.identity);
-            }*/
             ApplicationModel.Mapset = JSONParser.Parse(((TextAsset)Resources.Load("Worlds/1/Set_1")).text);
         }
 
@@ -128,25 +86,41 @@ public class Main : MonoBehaviour {
         player = (GameObject) Instantiate(Resources.Load("sprite-triangle"), playerstartpos, Quaternion.identity);
         player.transform.localScale = new Vector3(0.3f, 0.3f, 1);
 
-        var ui = new GameObject();
+        for (int l = 0; l < ApplicationModel.Level; l++)
+        {
+            Vector3 timelinepos = new Position(mapsize / 2, -2 - l).ToWorldPos(tilesize, mapsize) + new Vector3(-0.5f * tilesize / 100, 0, 0);
+            var timeline = (GameObject)Instantiate(Resources.Load("blanc"), timelinepos, Quaternion.identity);
+            timeline.transform.localScale = new Vector3(mapsize, 0.2f, 1);
 
-        Vector3 timelinepos = new Position(mapsize / 2, -2).ToWorldPos(tilesize, mapsize);
-        var timeline = (GameObject)Instantiate(Resources.Load("blanc"), timelinepos, Quaternion.identity);
-        timeline.transform.localScale = new Vector3(mapsize, 1, 1);
-        //timeline.transform.Translate(new Vector3(-0.5f * tilesize / 100, 0, 0));
-        timeline.transform.parent = ui.transform;
+            var timeBasePosition = new Position(mapsize / 4, -2 - l).ToWorldPos(tilesize, mapsize) + new Vector3(-0.5f * tilesize / 100, 0, 0);
+            var basetime = (GameObject)Instantiate(Resources.Load("blanc"), timeBasePosition, Quaternion.identity);
+            basetime.transform.localScale = new Vector3(0.1f, 1, 1);
 
-        Vector3 timepos = new Position(0, -2).ToWorldPos(tilesize, mapsize);
-        time = (GameObject)Instantiate(Resources.Load("wall"), timepos, Quaternion.identity);
-        time.transform.localScale = new Vector3(0.1f, 1, 1);
-        //time.transform.Translate(new Vector3(-0.5f * tilesize / 100, 0, 0));
-        time.transform.parent = ui.transform;
+            for (int t = 0; t <= leveltime * speed; t++)
+            {
+                var timelineobjectpos = timeBasePosition + Vector3.right * t * tilesize / 100;
+                GameObject timelineobject = (GameObject)Instantiate(Resources.Load("blanc"), timelineobjectpos, Quaternion.identity);
+                timelineobject.transform.localScale = new Vector3(0.2f, 0.3f, 1);
+                timelineobjects.Add(timelineobject);
+            }
+        }
 
-        timeBase = new GameObject();
-        timeBase.transform.position = new Vector3(time.transform.position.x, time.transform.position.y, time.transform.position.z);
-        timeBase.transform.parent = ui.transform;
+        int level = 0;
+        foreach (List<int> levelinputs in ApplicationModel.Inputs)
+        {
+            foreach (int input in levelinputs)
+            {
+                var timeBasePosition = new Position(mapsize/4, -2 - level).ToWorldPos(tilesize, mapsize) + new Vector3(-0.5f * tilesize / 100, 0, 0);
 
-        ui.transform.position = new Vector3(-0.5f * tilesize / 100, 0, 0);
+                var timelineobjectpos = timeBasePosition + Vector3.right * input * tilesize / 100;
+                GameObject timelineobject = (GameObject)Instantiate(Resources.Load("perso"), timelineobjectpos, Quaternion.identity);
+                timelineobject.transform.localScale = new Vector3(0.2f, 1, 1);
+                timelineobjects.Add(timelineobject);
+            }
+
+            level++;
+        }
+
     }
 	
 	// Update is called once per frame
@@ -160,6 +134,12 @@ public class Main : MonoBehaviour {
         {
             int nextTimeSlot = Mathf.CeilToInt(levelTimer);
             ApplicationModel.Inputs[ApplicationModel.Level-1].Add(nextTimeSlot);
+
+            var timeBasePosition = new Position(mapsize / 4, -2 - (ApplicationModel.Level - 1)).ToWorldPos(tilesize, mapsize) + new Vector3(-0.5f * tilesize / 100, 0, 0);
+            var timelineobjectpos = timeBasePosition;
+            GameObject timelineobject = (GameObject)Instantiate(Resources.Load("perso"), timelineobjectpos, Quaternion.identity);
+            timelineobject.transform.localScale = new Vector3(0.2f, 1, 1);
+            timelineobjects.Add(timelineobject);
         }
 
         if (moveTimer > 1)
@@ -215,28 +195,24 @@ public class Main : MonoBehaviour {
             SceneManager.LoadScene(0);
         }
 
-
-        updateTimeLine(levelTimer);
-    }
-
-    private void updateTimeLine(float levelTimer)
-    {
-        timelineobjects.ForEach(o => GameObject.Destroy(o));
-        timelineobjects.Clear();
-
-        time.transform.position = Vector3.Lerp(timeBase.transform.position, new Vector3(timeBase.transform.position.x + mapsize * tilesize / 100f, timeBase.transform.position.y, 0), levelTimer / (leveltime * speed));
-        
-        foreach (List<int> levelinputs in ApplicationModel.Inputs)
+        foreach(GameObject o in timelineobjects)
         {
-            foreach (int input in levelinputs)
+            o.transform.Translate(Vector3.left * speed * tilesize * Time.deltaTime / 100);
+            if (o.transform.position.x > new Position(mapsize, 0).ToWorldPos(tilesize, mapsize).x
+                || o.transform.position.x < new Position(0, 0).ToWorldPos(tilesize, mapsize).x)
             {
-                var timelineobjectpos = Vector3.Lerp(timeBase.transform.position, new Vector3(timeBase.transform.position.x + mapsize * tilesize / 100f, timeBase.transform.position.y, 0), input / (leveltime * speed));
-                GameObject timelineobject = (GameObject)Instantiate(Resources.Load("perso"), timelineobjectpos, Quaternion.identity);
-                timelineobject.transform.localScale = new Vector3(0.2f, 1, 1);
-                timelineobjects.Add(timelineobject);
-            } 
+                o.SetActive(false);
+            } else
+            {
+                o.SetActive(true);
+            }
         }
 
-        
+        updateRotation();
+    }
+
+    private void updateRotation()
+    {
+        player.transform.rotation = Quaternion.Lerp(player.transform.rotation, Position.DirToRot(playerDir), 0.2f);
     }
 }

@@ -85,4 +85,28 @@ class Position
                 return Direction.None;
         }
     }
+
+    public static Quaternion DirToRot(Direction dir)
+    {
+        Quaternion rotation = Quaternion.identity;
+        switch (dir)
+        {
+            case Direction.Up:
+                rotation.eulerAngles = new Vector3(0, 0, 90);
+                break;
+            case Direction.Right:
+                break;
+            case Direction.Down:
+                rotation.eulerAngles = new Vector3(0, 0, -90);
+                return rotation;
+            case Direction.Left:
+                rotation.eulerAngles = new Vector3(0, 0, -180);
+                return rotation;
+            case Direction.None:
+            default:
+                return Quaternion.identity;
+        }
+
+        return rotation;
+    }
 }
