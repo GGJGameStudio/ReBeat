@@ -7,7 +7,7 @@
          "opacity":1,
          "properties":
             {
-             "Mechanic":"Stop"
+             "Mechanic":"TurnL"
             },
          "type":"tilelayer",
          "visible":true,
@@ -37,7 +37,7 @@
          "opacity":1,
          "properties":
             {
-             "Mechanic":"TeleF"
+             "Mechanic":"TurnR"
             },
          "type":"tilelayer",
          "visible":true,
