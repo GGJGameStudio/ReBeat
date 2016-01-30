@@ -22,6 +22,18 @@ namespace Assets.Model
             }
         }
 
+
+        public BaseEnvironment Clone()
+        {
+            BaseEnvironment clone = new BaseEnvironment()
+            {
+                Id = this.Id,
+                Type = this.Type,
+                UnityResource = this.UnityResource
+            };
+            return clone;
+        }
+
         public virtual void ApplyEffect()
         {
             //this method is separated from collectibles because it will interfere on something else

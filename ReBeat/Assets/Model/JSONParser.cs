@@ -122,7 +122,7 @@ namespace Assets.Model
 
                         if (type == "C" && tileSet.CollectibleSet.ContainsKey(tileKey))
                         {
-                            lvl.Collectibles[i, j] = tileSet.CollectibleSet[tileKey];
+                            lvl.Collectibles[i, j] = tileSet.CollectibleSet[tileKey].Clone();
 
                             if (lvl.Collectibles[i, j].UnityResource == "START")
                             {
@@ -133,7 +133,7 @@ namespace Assets.Model
 
                         if (type == "E" && tileSet.EnvironmentSet.ContainsKey(tileKey))
                         {
-                            lvl.Environment[i, j] = tileSet.EnvironmentSet[tileKey];
+                            lvl.Environment[i, j] = tileSet.EnvironmentSet[tileKey].Clone();
                         }
                     }
                 }

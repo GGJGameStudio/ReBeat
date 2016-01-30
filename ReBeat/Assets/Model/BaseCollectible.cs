@@ -28,6 +28,17 @@ namespace Assets.Model
             }
         }
 
+        public BaseCollectible Clone()
+        {
+            BaseCollectible clone = new BaseCollectible()
+            {
+                Id = this.Id,
+                Type = this.Type,
+                UnityResource = this.UnityResource
+            };
+            return clone;
+        }
+
         public virtual void ApplyEffect()
         {
             //this method is separated from collectibles because it will interfere on something else

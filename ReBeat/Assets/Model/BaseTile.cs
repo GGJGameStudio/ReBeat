@@ -11,5 +11,6 @@ namespace Assets.Model
         public int Id;
 
         public abstract void initTileType();
+        
     }
 }
