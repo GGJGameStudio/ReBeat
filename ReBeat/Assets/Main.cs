@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
+using System.Collections;
+using SimpleJSON;
+using Assets.Model;
 
 public class Main : MonoBehaviour {
 
@@ -58,8 +61,6 @@ public class Main : MonoBehaviour {
 
         Vector3 coinpos = new Position(1, 1).ToWorldPos(tilesize, mapsize);
         Instantiate(Resources.Load("coin"), coinpos, Quaternion.identity);
-
-
 
     }
 	
