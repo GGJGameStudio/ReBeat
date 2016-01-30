@@ -23,6 +23,7 @@ public class Main : MonoBehaviour {
     private float moveTimer = 0;
     private float levelTimer = 0;
     private List<GameObject> timelineobjects = new List<GameObject>();
+    private List<GameObject> timelineinputobjects = new List<GameObject>();
 
     public int score = 0;
 
@@ -105,11 +106,21 @@ public class Main : MonoBehaviour {
 
             for (int t = 0; t <= leveltime * speed; t++)
             {
+                //graduation
                 var timelineobjectpos = timeBasePosition + Vector3.right * t * tilesize / 100;
                 GameObject timelineobject = (GameObject)Instantiate(Resources.Load("blanc"), timelineobjectpos, Quaternion.identity);
                 timelineobject.transform.localScale = new Vector3(0.2f, 0.3f, 1);
                 timelineobjects.Add(timelineobject);
+
+                if (l == ApplicationModel.Level - 1)
+                {
+                    //input (caché)
+                    GameObject timelineInputobject = (GameObject)Instantiate(Resources.Load("perso"), timelineobjectpos, Quaternion.identity);
+                    timelineInputobject.transform.localScale = new Vector3(0.2f, 1, 1);
+                    timelineinputobjects.Add(timelineInputobject);
+                    timelineInputobject.SetActive(false);
             }
+        }
         }
 
         int level = 0;
@@ -141,12 +152,6 @@ public class Main : MonoBehaviour {
         {
             int nextTimeSlot = Mathf.CeilToInt(levelTimer);
             ApplicationModel.Inputs[ApplicationModel.Level-1].Add(nextTimeSlot);
-
-            var timeBasePosition = new Position(mapsize / 4, -2 - (ApplicationModel.Level - 1)).ToWorldPos(tilesize, mapsize) + new Vector3(-0.5f * tilesize / 100, 0, 0);
-            var timelineobjectpos = timeBasePosition;
-            GameObject timelineobject = (GameObject)Instantiate(Resources.Load("perso"), timelineobjectpos, Quaternion.identity);
-            timelineobject.transform.localScale = new Vector3(0.2f, 1, 1);
-            timelineobjects.Add(timelineobject);
         }
 
         if (Input.GetKeyDown(KeyCode.Backspace))
@@ -218,19 +223,45 @@ public class Main : MonoBehaviour {
             }
         }
 
+        foreach(GameObject o in timelineobjects)
+        {
+            o.transform.Translate(Vector3.left * speed * tilesize * Time.deltaTime / 100);
+            if (o.transform.position.x > new Position(mapsize, 0).ToWorldPos(tilesize, mapsize).x
+                || o.transform.position.x < new Position(0, 0).ToWorldPos(tilesize, mapsize).x)
+            {
+                o.SetActive(false);
+            } else
+            {
+                o.SetActive(true);
+            }
+        }
+        int i = 0;
+        foreach (GameObject o in timelineinputobjects)
+        {
+            o.transform.Translate(Vector3.left * speed * tilesize * Time.deltaTime / 100);
+            if (o.transform.position.x < new Position(0, 0).ToWorldPos(tilesize, mapsize).x)
+            {
+                o.SetActive(false);
+            }
+            else if (ApplicationModel.Inputs[ApplicationModel.Level - 1].Contains(i) && o.transform.position.x < new Position(mapsize / 4, 0).ToWorldPos(tilesize, mapsize).x)
+            {
+                o.SetActive(true);
+            }
+            i++;
+        }
+
+        updateRotation();
+
         if (levelTimer > leveltime * speed)
         {
             ApplicationModel.Level++;
-            if (ApplicationModel.Level > 2)
+            if (ApplicationModel.Level > ApplicationModel.Mapset.Levels.Length)
             {
                 ApplicationModel.Level = 1;
                 ApplicationModel.Inputs.Clear();
             }
             SceneManager.LoadScene(0);
         }
-
-
-        updateTimeLine(levelTimer);
     }
 
     private Position checkTeleportPosition(Position position, Direction dir)
@@ -255,24 +286,6 @@ public class Main : MonoBehaviour {
         return new Position((position.X + env.GetLength(0)) % env.GetLength(0), (position.Y + env.GetLength(1)) % env.GetLength(1));
     }
 
-    private void updateTimeLine(float levelTimer)
-    {
-        foreach (GameObject o in timelineobjects)
-        {
-            o.transform.Translate(Vector3.left * speed * tilesize * Time.deltaTime / 100);
-            if (o.transform.position.x > new Position(mapsize, 0).ToWorldPos(tilesize, mapsize).x
-                || o.transform.position.x < new Position(0, 0).ToWorldPos(tilesize, mapsize).x)
-        {
-                o.SetActive(false);
-            } else
-            {
-                o.SetActive(true);
-            } 
-        }
-
-        updateRotation();
-    }
-        
     private void updateRotation()
     {
         player.transform.rotation = Quaternion.Lerp(player.transform.rotation, Position.DirToRot(playerDir), 0.2f);
