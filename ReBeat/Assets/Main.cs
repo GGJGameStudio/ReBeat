@@ -7,12 +7,10 @@ using Assets.Model;
 
 public class Main : MonoBehaviour {
 
-    private int mapsize = 20;
+    private int mapsize = 10;
     private int tilesize = 32;
     private float speed = 8;
     private float leveltime = 5;
-    private Position startPos = new Position(1, 5);
-    private Direction startDir = Direction.Right;
 
     private GameObject player;
     private Position playerPos;
@@ -35,7 +33,7 @@ public class Main : MonoBehaviour {
         //charger map
         if (ApplicationModel.Level == 1)
         {
-            ApplicationModel.Mapset = new Mapset();
+            /*ApplicationModel.Mapset = new Mapset();
             ApplicationModel.Mapset.Levels = new Level[2];
             for (int lvl = 0; lvl < ApplicationModel.Mapset.Levels.Length; lvl++)
             {
@@ -71,9 +69,19 @@ public class Main : MonoBehaviour {
 
                     }
                 }
-            }
+                Vector3 pos = new Vector3(i, j, 0) * 0.32f;
+                Instantiate(Resources.Load("blanc"), pos, Quaternion.identity);
+            }*/
+            ApplicationModel.Mapset = JSONParser.Parse(((TextAsset)Resources.Load("Worlds/1/Set_1")).text);
         }
-        
+
+
+        Position startPos = new Position(ApplicationModel.Mapset.Levels[ApplicationModel.Level-1].StartX, ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].StartY);
+        Direction startDir = ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].StartDirection;
+
+
+
+
         ApplicationModel.Inputs.Add(new List<int>());
 
         for (int i = 0; i < ApplicationModel.Mapset.Levels[ApplicationModel.Level-1].Environment.GetLength(0); i++)
@@ -93,20 +101,23 @@ public class Main : MonoBehaviour {
                         break;
                 }
 
-                switch (ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Collectibles[i, j].Type)
+                if (ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Collectibles[i, j] != null)
                 {
-                    case CollectibleType.Coin:
-                        Instantiate(Resources.Load("coin"), pos, Quaternion.identity);
-                        break;
-                    default:
-                        break;
+                    switch (ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Collectibles[i, j].Type)
+                    {
+                        case CollectibleType.Coin:
+                            Instantiate(Resources.Load("coin"), pos, Quaternion.identity);
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
         }
 
         startPos = new Position(startPos);
         playerPos = new Position(startPos);
-        playerDir = Direction.Right;
+        playerDir = startDir;
         nextPos = playerPos.Add(Position.DirToPos(playerDir));
 
         Vector3 playerstartpos = startPos.ToWorldPos(tilesize, mapsize);
@@ -136,8 +147,9 @@ public class Main : MonoBehaviour {
 
         ui.transform.position = new Vector3(-0.5f * tilesize / 100, 0, 0);
 
-
-
+        
+        
+        
 
     }
 	

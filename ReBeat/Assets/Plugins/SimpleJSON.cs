@@ -694,6 +694,13 @@ namespace SimpleJSON
                     m_Dict.Add(aKey,value);
             }
         }
+
+        public List<String> GetKeys()
+        {
+            List<String> keys = new List<string>();
+            return m_Dict.Keys.ToList<String>();
+        }
+
         public override JSONNode this[int aIndex]
         {
             get
