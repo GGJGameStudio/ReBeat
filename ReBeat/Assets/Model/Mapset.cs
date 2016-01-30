@@ -33,8 +33,8 @@ namespace Assets.Model
         public void StackLevelCollectibles(Level lvl)
         {
             for (int i = 0; i < Collectibles.GetLength(0); i++)
-                for (int j = 0; j < Collectibles.GetLength(1); i++)
-                    if (this.Collectibles[i, j] != null && this.Collectibles[i, j].Type ==CollectibleType.Nothing)
+                for (int j = 0; j < Collectibles.GetLength(1); j++)
+                    if (this.Collectibles[i, j].Type == CollectibleType.Nothing)
                         this.Collectibles[i, j] = lvl.Collectibles[i, j];
                 
         }

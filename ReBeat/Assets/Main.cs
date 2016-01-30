@@ -80,8 +80,11 @@ public class Main : MonoBehaviour {
         Direction startDir = ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].StartDirection;
 
 
-
-
+        if (ApplicationModel.Level > 1)
+        {
+            ApplicationModel.Mapset.Levels[ApplicationModel.Level-1].StackLevelCollectibles(ApplicationModel.Mapset.Levels[ApplicationModel.Level-2]);
+        }
+        
         ApplicationModel.Inputs.Add(new List<int>());
 
         for (int i = 0; i < ApplicationModel.Mapset.Levels[ApplicationModel.Level-1].Environment.GetLength(0); i++)
@@ -100,17 +103,14 @@ public class Main : MonoBehaviour {
                     default:
                         break;
                 }
-
-                if (ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Collectibles[i, j] != null)
+                
+                switch (ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Collectibles[i, j].Type)
                 {
-                    switch (ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Collectibles[i, j].Type)
-                    {
-                        case CollectibleType.Coin:
-                            Instantiate(Resources.Load("coin"), pos, Quaternion.identity);
-                            break;
-                        default:
-                            break;
-                    }
+                    case CollectibleType.Coin:
+                        Instantiate(Resources.Load("coin"), pos, Quaternion.identity);
+                        break;
+                    default:
+                        break;
                 }
             }
         }
@@ -123,9 +123,6 @@ public class Main : MonoBehaviour {
         Vector3 playerstartpos = startPos.ToWorldPos(tilesize, mapsize);
         player = (GameObject) Instantiate(Resources.Load("sprite-triangle"), playerstartpos, Quaternion.identity);
         player.transform.localScale = new Vector3(0.3f, 0.3f, 1);
-
-        Vector3 coinpos = new Position(1, 1).ToWorldPos(tilesize, mapsize);
-        Instantiate(Resources.Load("coin"), coinpos, Quaternion.identity);
 
         var ui = new GameObject();
 
@@ -146,11 +143,6 @@ public class Main : MonoBehaviour {
         timeBase.transform.parent = ui.transform;
 
         ui.transform.position = new Vector3(-0.5f * tilesize / 100, 0, 0);
-
-        
-        
-        
-
     }
 	
 	// Update is called once per frame
@@ -178,14 +170,16 @@ public class Main : MonoBehaviour {
             {
                 if (levelinputs.Contains(currentTimeSlot))
                 {
-                    if (level == 1)
+                    switch (ApplicationModel.Mapset.Levels[level-1].Mechanic)
                     {
-                        playerDir = Position.turnRight(playerDir);
-                    }
-
-                    if (level == 2)
-                    {
-                        playerDir = Position.turnLeft(playerDir);
+                        case LevelMechanic.TurnRight:
+                            playerDir = Position.turnRight(playerDir);
+                            break;
+                        case LevelMechanic.TurnLeft:
+                            playerDir = Position.turnLeft(playerDir);
+                            break;
+                        default:
+                            break;
                     }
                 }
                 
@@ -202,7 +196,7 @@ public class Main : MonoBehaviour {
                 if (ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Collectibles[nextPos.X, nextPos.Y].Type == CollectibleType.Coin)
                 {
                     score += 10;
-                    ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Collectibles[nextPos.X, nextPos.Y] = null;
+                    //ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Collectibles[nextPos.X, nextPos.Y].Type = CollectibleType.Nothing;
                 }
             }
         }
