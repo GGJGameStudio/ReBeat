@@ -142,6 +142,13 @@ public class Main : MonoBehaviour {
             timelineobjects.Add(timelineobject);
         }
 
+        if (Input.GetKeyDown(KeyCode.Backspace))
+        {
+            ApplicationModel.Level = 1;
+            ApplicationModel.Inputs.Clear();
+            SceneManager.LoadScene(0);
+        }
+
         if (moveTimer > 1)
         {
             playerPos = nextPos;
