@@ -17,6 +17,8 @@ namespace Assets.Model
 
             //Build TileSet
             TileSet tileSet = new TileSet();
+            tileSet.CollectibleSet.Add(0, new BaseCollectible() { Id = 0, Type = CollectibleType.Nothing });
+            tileSet.EnvironmentSet.Add(0, new BaseEnvironment() { Id = 0, Type = TileType.Blank });
             #region tileset Build
             JSONArray tilesetJsonArray = mapsetJson["tilesets"].AsArray;
             foreach(JSONNode tilesetJson in tilesetJsonArray)
@@ -121,7 +123,8 @@ namespace Assets.Model
                         if (type == "C" && tileSet.CollectibleSet.ContainsKey(tileKey))
                         {
                             lvl.Collectibles[i, j] = tileSet.CollectibleSet[tileKey];
-                            if(lvl.Collectibles[i,j].UnityResource == "START")
+
+                            if (lvl.Collectibles[i, j].UnityResource == "START")
                             {
                                 lvl.StartX = i;
                                 lvl.StartY = j;
