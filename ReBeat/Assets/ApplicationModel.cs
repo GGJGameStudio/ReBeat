@@ -12,4 +12,6 @@ class ApplicationModel
     static public List<List<int>> Inputs = new List<List<int>>();
 
     static public Mapset Mapset;
+
+    static public int Score = 0;
 }

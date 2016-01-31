@@ -28,8 +28,7 @@ public class Main : MonoBehaviour {
     private float levelTimer;
     private List<GameObject> timelineobjects = new List<GameObject>();
     private List<GameObject> timelineinputobjects = new List<GameObject>();
-
-    public int score = 0;
+    
 
     private int uiOffsetX = 8;
     private int uiOffsetY = 3;
@@ -48,6 +47,7 @@ public class Main : MonoBehaviour {
         if (ApplicationModel.Level == 1)
         {
             ApplicationModel.Mapset = JSONParser.Parse(((TextAsset)Resources.Load("Worlds/1/Set_1")).text);
+            ApplicationModel.Score = 0;
         }
 
 
@@ -147,7 +147,7 @@ public class Main : MonoBehaviour {
         }
 
         Text scoreText = textUI.AddComponent<Text>();
-        scoreText.text = score.ToString();
+        scoreText.text = ApplicationModel.Score.ToString();
         Font ArialFont = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf");
         scoreText.font = ArialFont;
         scoreText.fontSize = 30;
@@ -242,14 +242,14 @@ public class Main : MonoBehaviour {
 
             if (ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Collectibles[nextPos.X, nextPos.Y].Type == CollectibleType.Coin)
             {
-                score += 10;
+                ApplicationModel.Score += 10;
                 ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Collectibles[nextPos.X, nextPos.Y].Type = CollectibleType.Nothing;
                 Destroy(ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Collectibles[nextPos.X, nextPos.Y].GameObject);
             }
 
             if (ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Collectibles[nextPos.X, nextPos.Y].Type == CollectibleType.BigCoin)
             {
-                score += 100;
+                ApplicationModel.Score += 100;
                 ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Collectibles[nextPos.X, nextPos.Y].Type = CollectibleType.Nothing;
                 Destroy(ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Collectibles[nextPos.X, nextPos.Y].GameObject);
             }
@@ -264,7 +264,7 @@ public class Main : MonoBehaviour {
         updateTimeLine();
         updateRotation();
 
-        textUI.GetComponent<Text>().text = score.ToString();
+        textUI.GetComponent<Text>().text = ApplicationModel.Score.ToString();
 
         if (levelTimer > leveltime * speed)
         {
