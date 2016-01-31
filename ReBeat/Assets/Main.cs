@@ -30,7 +30,7 @@ public class Main : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-
+        
         //charger map
         if (ApplicationModel.Level == 1)
         {
@@ -175,35 +175,48 @@ public class Main : MonoBehaviour {
             {
                 if (levelinputs.Contains(currentTimeSlot))
                 {
+                    AudioSource audio = GetComponent<AudioSource>();
+                    AudioClip clip = null;
                     switch (ApplicationModel.Mapset.Levels[level-1].Mechanic)
                     {
                         case LevelMechanic.TurnRight:
                             playerDir = Position.turnRight(playerDir);
+                            clip = (AudioClip)Resources.Load("Sound/stem04");
                             break;
                         case LevelMechanic.TurnLeft:
                             playerDir = Position.turnLeft(playerDir);
+                            clip = (AudioClip)Resources.Load("Sound/stem03");
                             break;
                         case LevelMechanic.SlideLeft:
                             playerPos = Position.TeleportLeft(playerPos, playerDir, 3);
                             playerPos = checkTeleportPosition(playerPos, Position.turnLeft(playerDir));
+                            clip = (AudioClip)Resources.Load("Sound/stem05");
                             break;
                         case LevelMechanic.SlideRight:
                             playerPos = Position.TeleportRight(playerPos, playerDir, 3);
                             playerPos = checkTeleportPosition(playerPos, Position.turnRight(playerDir));
+                            clip = (AudioClip)Resources.Load("Sound/stem05");
                             break;
                         case LevelMechanic.TeleportFwd:
                             playerPos = Position.TeleportFwd(playerPos, playerDir, 3);
                             playerPos = checkTeleportPosition(playerPos, playerDir);
+                            clip = (AudioClip)Resources.Load("Sound/stem01");
                             break;
                         case LevelMechanic.TeleportBwd:
                             playerPos = Position.TeleportBwd(playerPos, playerDir, 3);
                             playerPos = checkTeleportPosition(playerPos, Position.turnLeft(Position.turnLeft(playerDir)));
+                            clip = (AudioClip)Resources.Load("Sound/stem01");
                             break;
                         case LevelMechanic.StartStop:
                             walking = !walking;
+                            clip = (AudioClip)Resources.Load("Sound/stem02");
                             break;
                         default:
                             break;
+                    }
+                    if (clip != null)
+                    {
+                        audio.PlayOneShot(clip);
                     }
                 }
                 
