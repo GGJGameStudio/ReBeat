@@ -1,0 +1,345 @@
+fileFormatVersion: 2
+guid: 949ff04f4336d2849a5781a4f28743f8
+timeCreated: 1454246831
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: caramel_0
+    21300002: caramel_1
+    21300004: caramel_2
+    21300006: caramel_3
+    21300008: caramel_4
+    21300010: caramel_5
+    21300012: caramel_6
+    21300014: caramel_7
+    21300016: caramel_8
+    21300018: caramel_9
+    21300020: caramel_10
+    21300022: caramel_11
+    21300024: caramel_12
+    21300026: caramel_13
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: caramel_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 144
+        height: 144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -43, y: 53}
+        - {x: -52, y: 41}
+        - {x: -52, y: -6}
+        - {x: -42, y: -48}
+        - {x: 28, y: -48}
+        - {x: 51, y: -9}
+        - {x: 51, y: 46}
+        - {x: 43, y: 53}
+    - name: caramel_1
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 0
+        width: 144
+        height: 144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -43, y: 48}
+        - {x: -48, y: 37}
+        - {x: -48, y: -4}
+        - {x: -43, y: -42}
+        - {x: -37, y: -43}
+        - {x: 23, y: -43}
+        - {x: 49, y: -16}
+        - {x: 49, y: 31}
+        - {x: 47, y: 48}
+    - name: caramel_2
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 0
+        width: 144
+        height: 144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -45, y: 44}
+        - {x: -50, y: 32}
+        - {x: -50, y: -15}
+        - {x: -33, y: -35}
+        - {x: -24, y: -41}
+        - {x: 9, y: -41}
+        - {x: 51, y: -25}
+        - {x: 51, y: 29}
+        - {x: 27, y: 44}
+    - name: caramel_3
+      rect:
+        serializedVersion: 2
+        x: 432
+        y: 0
+        width: 144
+        height: 144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -43, y: 46}
+        - {x: -50, y: 34}
+        - {x: -50, y: -19}
+        - {x: -27, y: -43}
+        - {x: 12, y: -43}
+        - {x: 49, y: -29}
+        - {x: 49, y: 37}
+        - {x: 48, y: 46}
+    - name: caramel_4
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 0
+        width: 144
+        height: 144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -47, y: 46}
+        - {x: -50, y: 44}
+        - {x: -50, y: -10}
+        - {x: -41, y: -41}
+        - {x: 33, y: -41}
+        - {x: 51, y: -17}
+        - {x: 51, y: 46}
+    - name: caramel_5
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 0
+        width: 144
+        height: 144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -41, y: 46}
+        - {x: -52, y: 25}
+        - {x: -52, y: -7}
+        - {x: -18, y: -43}
+        - {x: 41, y: -43}
+        - {x: 51, y: -20}
+        - {x: 51, y: 46}
+    - name: caramel_6
+      rect:
+        serializedVersion: 2
+        x: 864
+        y: 0
+        width: 144
+        height: 144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 44, y: 55}
+        - {x: -39, y: 55}
+        - {x: -52, y: 22}
+        - {x: -52, y: -11}
+        - {x: -43, y: -22}
+        - {x: -8, y: -50}
+        - {x: 18, y: -50}
+        - {x: 20, y: -49}
+        - {x: 35, y: -30}
+        - {x: 51, y: -7}
+        - {x: 51, y: 34}
+    - name: caramel_7
+      rect:
+        serializedVersion: 2
+        x: 1008
+        y: 0
+        width: 144
+        height: 144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -40, y: 53}
+        - {x: -51, y: 33}
+        - {x: -51, y: -4}
+        - {x: -48, y: -48}
+        - {x: 54, y: -48}
+        - {x: 54, y: 45}
+        - {x: 53, y: 53}
+    - name: caramel_8
+      rect:
+        serializedVersion: 2
+        x: 1152
+        y: 0
+        width: 144
+        height: 144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -15, y: 46}
+        - {x: -44, y: 44}
+        - {x: -49, y: 28}
+        - {x: -49, y: -33}
+        - {x: -12, y: -43}
+        - {x: 36, y: -43}
+        - {x: 50, y: -15}
+        - {x: 50, y: 41}
+        - {x: 42, y: 46}
+    - name: caramel_9
+      rect:
+        serializedVersion: 2
+        x: 1296
+        y: 0
+        width: 144
+        height: 144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 7, y: 46}
+        - {x: -37, y: 40}
+        - {x: -49, y: 35}
+        - {x: -49, y: -23}
+        - {x: -48, y: -26}
+        - {x: -37, y: -41}
+        - {x: 40, y: -41}
+        - {x: 52, y: -35}
+        - {x: 52, y: 40}
+        - {x: 37, y: 46}
+    - name: caramel_10
+      rect:
+        serializedVersion: 2
+        x: 1440
+        y: 0
+        width: 144
+        height: 144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -32, y: 44}
+        - {x: -49, y: 34}
+        - {x: -49, y: -34}
+        - {x: -35, y: -41}
+        - {x: 29, y: -41}
+        - {x: 31, y: -40}
+        - {x: 52, y: -16}
+        - {x: 52, y: 44}
+    - name: caramel_11
+      rect:
+        serializedVersion: 2
+        x: 1584
+        y: 0
+        width: 144
+        height: 144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -32, y: 46}
+        - {x: -51, y: 29}
+        - {x: -51, y: 0}
+        - {x: -48, y: -1}
+        - {x: -51, y: -2}
+        - {x: -51, y: -32}
+        - {x: -45, y: -43}
+        - {x: 40, y: -43}
+        - {x: 54, y: -36}
+        - {x: 54, y: 46}
+    - name: caramel_12
+      rect:
+        serializedVersion: 2
+        x: 1728
+        y: 0
+        width: 144
+        height: 144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -47, y: 48}
+        - {x: -51, y: 44}
+        - {x: -51, y: -12}
+        - {x: -49, y: -18}
+        - {x: -20, y: -43}
+        - {x: 19, y: -43}
+        - {x: 29, y: -38}
+        - {x: 54, y: -16}
+        - {x: 54, y: 30}
+        - {x: 43, y: 48}
+    - name: caramel_13
+      rect:
+        serializedVersion: 2
+        x: 1872
+        y: 0
+        width: 144
+        height: 144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -39, y: 55}
+        - {x: -51, y: 41}
+        - {x: -51, y: -31}
+        - {x: -30, y: -50}
+        - {x: 20, y: -50}
+        - {x: 54, y: -20}
+        - {x: 54, y: 55}
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

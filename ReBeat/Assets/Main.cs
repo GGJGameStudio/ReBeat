@@ -98,7 +98,7 @@ public class Main : MonoBehaviour {
         walking = true;
 
         Vector3 playerstartpos = startPos.ToWorldPos(tilesize, mapsize);
-        player = (GameObject) Instantiate(Resources.Load("Player/Prefabs/penrose01"), playerstartpos, Quaternion.identity);
+        player = (GameObject) Instantiate(Resources.Load("Player/Prefabs/caramel_0"), playerstartpos, Quaternion.identity);
         player.transform.localScale = new Vector3((float)tilesize / resourcetilesize, (float)tilesize / resourcetilesize);
         
         var camera = GetComponent<Camera>();
