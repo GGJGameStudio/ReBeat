@@ -15,6 +15,7 @@ public class Main : MonoBehaviour {
     private float leveltime = 8;
     private float tolerance = 1f;
     private float startDelay = 2;
+    private float explosionTime = 1;
 
     private GameObject player;
     private Position teleportPreviousPosition;
