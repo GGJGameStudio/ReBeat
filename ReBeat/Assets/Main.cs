@@ -50,7 +50,7 @@ public class Main : MonoBehaviour {
         //charger map
         if (ApplicationModel.Level == 1)
         {
-            ApplicationModel.Mapset = JSONParser.Parse(((TextAsset)Resources.Load("Worlds/1/Set_5")).text);
+            ApplicationModel.Mapset = JSONParser.Parse(((TextAsset)Resources.Load("Worlds/1/Set_3")).text);
             ApplicationModel.Score = 0;
         }
 
@@ -110,6 +110,28 @@ public class Main : MonoBehaviour {
             var timeBasePosition = new Vector3(uiOffsetX + l * uiGapXBase / (ApplicationModel.Level + 1), uiOffsetY + uiOffsetPlayerY, 0);
             var basetime = (GameObject)Instantiate(Resources.Load("Timeline/prefab/player"), timeBasePosition, Quaternion.identity);
 
+            var iconePosition = new Vector3(uiOffsetX + l * uiGapXBase / (ApplicationModel.Level + 1), uiOffsetY + uiOffsetPlayerY + 5.25f, 0);
+            GameObject icone = null;
+            switch(ApplicationModel.Mapset.Levels[l].Mechanic)
+            {
+                case LevelMechanic.TurnLeft:
+                    icone = (GameObject)Instantiate(Resources.Load("Icones/prefab/gauche"), iconePosition, Quaternion.identity);
+                    break;
+                case LevelMechanic.TurnRight:
+                    icone = (GameObject)Instantiate(Resources.Load("Icones/prefab/droite"), iconePosition, Quaternion.identity);
+                    break;
+                case LevelMechanic.TeleportFwd:
+                    icone = (GameObject)Instantiate(Resources.Load("Icones/prefab/tp"), iconePosition, Quaternion.identity);
+                    break;
+                case LevelMechanic.StartStop:
+                    icone = (GameObject)Instantiate(Resources.Load("Icones/prefab/stop"), iconePosition, Quaternion.identity);
+                    break;
+            }
+            if (icone != null)
+            {
+                icone.transform.localScale = new Vector3(0.3f, 0.3f, 1);
+            }
+
             for (int t = -(int)levelTimer; t <= -levelTimer + leveltime * speed; t++)
             {
                 //graduation
@@ -131,8 +153,8 @@ public class Main : MonoBehaviour {
                     GameObject timelineInputobject = (GameObject)Instantiate(Resources.Load("Timeline/prefab/input"), timelineobjectpos, Quaternion.identity);
                     timelineinputobjects.Add(timelineInputobject);
                     timelineInputobject.SetActive(false);
+                }
             }
-        }
         }
 
         int level = 0;
