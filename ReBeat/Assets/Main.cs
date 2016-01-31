@@ -55,17 +55,6 @@ public class Main : MonoBehaviour {
             {
                 Vector3 pos = new Position(i, j).ToWorldPos(tilesize, mapsize);
                 GameObject obj = null;
-                /*switch (ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Environment[i, j].Type)
-                {
-                    case TileType.Blank:
-                        obj = (GameObject) Instantiate(Resources.Load("blanc"), pos, Quaternion.identity);
-                        break;
-                    case TileType.Wall:
-                        obj = (GameObject) Instantiate(Resources.Load("wall"), pos, Quaternion.identity);
-                        break;
-                    default:
-                        break;
-                }*/
                 string envTex = "Environment/Prefabs/" + ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Environment[i, j].UnityResource;
 
                 obj = (GameObject)Instantiate(Resources.Load(envTex), pos, Quaternion.identity);
@@ -99,7 +88,7 @@ public class Main : MonoBehaviour {
         {
             Vector3 timelinepos = new Vector3(5 + l, 0, 0);
             var timeline = (GameObject)Instantiate(Resources.Load("Timeline/prefab/timeline"), timelinepos, Quaternion.identity);
-            
+
             var timeBasePosition = new Vector3(5 + l, -2, 0);
             var basetime = (GameObject)Instantiate(Resources.Load("Timeline/prefab/player"), timeBasePosition, Quaternion.identity);
 
@@ -111,7 +100,8 @@ public class Main : MonoBehaviour {
                 if (t != leveltime * speed)
                 {
                     timelineobject = (GameObject)Instantiate(Resources.Load("Timeline/prefab/graduation"), timelineobjectpos, Quaternion.identity);
-                } else
+                }
+                else
                 {
                     timelineobject = (GameObject)Instantiate(Resources.Load("Timeline/prefab/fin"), timelineobjectpos, Quaternion.identity);
                 }
@@ -123,8 +113,8 @@ public class Main : MonoBehaviour {
                     GameObject timelineInputobject = (GameObject)Instantiate(Resources.Load("Timeline/prefab/input"), timelineobjectpos, Quaternion.identity);
                     timelineinputobjects.Add(timelineInputobject);
                     timelineInputobject.SetActive(false);
+                }
             }
-        }
         }
 
         int level = 0;
