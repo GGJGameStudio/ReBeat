@@ -48,7 +48,7 @@ public class Main : MonoBehaviour {
         //charger map
         if (ApplicationModel.Level == 1)
         {
-            ApplicationModel.Mapset = JSONParser.Parse(((TextAsset)Resources.Load("Worlds/2/Set_1")).text);
+            ApplicationModel.Mapset = JSONParser.Parse(((TextAsset)Resources.Load("Worlds/3/Set_1")).text);
             ApplicationModel.Score = 0;
         }
 
