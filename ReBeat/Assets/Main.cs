@@ -30,7 +30,7 @@ public class Main : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-
+        
         //charger map
         if (ApplicationModel.Level == 1)
         {
@@ -94,29 +94,33 @@ public class Main : MonoBehaviour {
         Vector3 playerstartpos = startPos.ToWorldPos(tilesize, mapsize);
         player = (GameObject) Instantiate(Resources.Load("sprite-triangle"), playerstartpos, Quaternion.identity);
 
+        var camera = GetComponent<Camera>();
         for (int l = 0; l < ApplicationModel.Level; l++)
         {
-            Vector3 timelinepos = new Position(mapsize / 2, -2 - l).ToWorldPos(tilesize, mapsize) + new Vector3(-0.5f * tilesize / 100, 0, 0);
-            var timeline = (GameObject)Instantiate(Resources.Load("blanc"), timelinepos, Quaternion.identity);
-            timeline.transform.localScale = new Vector3(mapsize, 0.2f, 1);
-
-            var timeBasePosition = new Position(mapsize / 4, -2 - l).ToWorldPos(tilesize, mapsize) + new Vector3(-0.5f * tilesize / 100, 0, 0);
-            var basetime = (GameObject)Instantiate(Resources.Load("blanc"), timeBasePosition, Quaternion.identity);
-            basetime.transform.localScale = new Vector3(0.1f, 1, 1);
+            Vector3 timelinepos = new Vector3(5 + l, 0, 0);
+            var timeline = (GameObject)Instantiate(Resources.Load("Timeline/prefab/timeline"), timelinepos, Quaternion.identity);
+            
+            var timeBasePosition = new Vector3(5 + l, -2, 0);
+            var basetime = (GameObject)Instantiate(Resources.Load("Timeline/prefab/player"), timeBasePosition, Quaternion.identity);
 
             for (int t = 0; t <= leveltime * speed; t++)
             {
                 //graduation
-                var timelineobjectpos = timeBasePosition + Vector3.right * t * tilesize / 100;
-                GameObject timelineobject = (GameObject)Instantiate(Resources.Load("blanc"), timelineobjectpos, Quaternion.identity);
-                timelineobject.transform.localScale = new Vector3(0.2f, 0.3f, 1);
+                var timelineobjectpos = timeBasePosition + Vector3.up * t * tilesize / 100;
+                GameObject timelineobject = null;
+                if (t != leveltime * speed)
+                {
+                    timelineobject = (GameObject)Instantiate(Resources.Load("Timeline/prefab/graduation"), timelineobjectpos, Quaternion.identity);
+                } else
+                {
+                    timelineobject = (GameObject)Instantiate(Resources.Load("Timeline/prefab/fin"), timelineobjectpos, Quaternion.identity);
+                }
                 timelineobjects.Add(timelineobject);
 
                 if (l == ApplicationModel.Level - 1)
                 {
                     //input (caché)
-                    GameObject timelineInputobject = (GameObject)Instantiate(Resources.Load("perso"), timelineobjectpos, Quaternion.identity);
-                    timelineInputobject.transform.localScale = new Vector3(0.2f, 1, 1);
+                    GameObject timelineInputobject = (GameObject)Instantiate(Resources.Load("Timeline/prefab/input"), timelineobjectpos, Quaternion.identity);
                     timelineinputobjects.Add(timelineInputobject);
                     timelineInputobject.SetActive(false);
             }
@@ -128,11 +132,10 @@ public class Main : MonoBehaviour {
         {
             foreach (int input in levelinputs)
             {
-                var timeBasePosition = new Position(mapsize/4, -2 - level).ToWorldPos(tilesize, mapsize) + new Vector3(-0.5f * tilesize / 100, 0, 0);
+                var timeBasePosition = new Vector3(5 + level, -2, 0);
 
-                var timelineobjectpos = timeBasePosition + Vector3.right * input * tilesize / 100;
-                GameObject timelineobject = (GameObject)Instantiate(Resources.Load("perso"), timelineobjectpos, Quaternion.identity);
-                timelineobject.transform.localScale = new Vector3(0.2f, 1, 1);
+                var timelineobjectpos = timeBasePosition + Vector3.up * input * tilesize / 100;
+                GameObject timelineobject = (GameObject)Instantiate(Resources.Load("Timeline/prefab/input"), timelineobjectpos, Quaternion.identity);
                 timelineobjects.Add(timelineobject);
             }
 
@@ -174,35 +177,48 @@ public class Main : MonoBehaviour {
             {
                 if (levelinputs.Contains(currentTimeSlot))
                 {
+                    AudioSource audio = GetComponent<AudioSource>();
+                    AudioClip clip = null;
                     switch (ApplicationModel.Mapset.Levels[level-1].Mechanic)
                     {
                         case LevelMechanic.TurnRight:
                             playerDir = Position.turnRight(playerDir);
+                            clip = (AudioClip)Resources.Load("Sound/stem04");
                             break;
                         case LevelMechanic.TurnLeft:
                             playerDir = Position.turnLeft(playerDir);
+                            clip = (AudioClip)Resources.Load("Sound/stem03");
                             break;
                         case LevelMechanic.SlideLeft:
                             playerPos = Position.TeleportLeft(playerPos, playerDir, 3);
                             playerPos = checkTeleportPosition(playerPos, Position.turnLeft(playerDir));
+                            clip = (AudioClip)Resources.Load("Sound/stem05");
                             break;
                         case LevelMechanic.SlideRight:
                             playerPos = Position.TeleportRight(playerPos, playerDir, 3);
                             playerPos = checkTeleportPosition(playerPos, Position.turnRight(playerDir));
+                            clip = (AudioClip)Resources.Load("Sound/stem05");
                             break;
                         case LevelMechanic.TeleportFwd:
                             playerPos = Position.TeleportFwd(playerPos, playerDir, 3);
                             playerPos = checkTeleportPosition(playerPos, playerDir);
+                            clip = (AudioClip)Resources.Load("Sound/stem01");
                             break;
                         case LevelMechanic.TeleportBwd:
                             playerPos = Position.TeleportBwd(playerPos, playerDir, 3);
                             playerPos = checkTeleportPosition(playerPos, Position.turnLeft(Position.turnLeft(playerDir)));
+                            clip = (AudioClip)Resources.Load("Sound/stem01");
                             break;
                         case LevelMechanic.StartStop:
                             walking = !walking;
+                            clip = (AudioClip)Resources.Load("Sound/stem02");
                             break;
                         default:
                             break;
+                    }
+                    if (clip != null)
+                    {
+                        audio.PlayOneShot(clip);
                     }
                 }
                 
@@ -223,33 +239,7 @@ public class Main : MonoBehaviour {
             }
         }
 
-        foreach(GameObject o in timelineobjects)
-        {
-            o.transform.Translate(Vector3.left * speed * tilesize * Time.deltaTime / 100);
-            if (o.transform.position.x > new Position(mapsize, 0).ToWorldPos(tilesize, mapsize).x
-                || o.transform.position.x < new Position(0, 0).ToWorldPos(tilesize, mapsize).x)
-            {
-                o.SetActive(false);
-            } else
-            {
-                o.SetActive(true);
-            }
-        }
-        int i = 0;
-        foreach (GameObject o in timelineinputobjects)
-        {
-            o.transform.Translate(Vector3.left * speed * tilesize * Time.deltaTime / 100);
-            if (o.transform.position.x < new Position(0, 0).ToWorldPos(tilesize, mapsize).x)
-            {
-                o.SetActive(false);
-            }
-            else if (ApplicationModel.Inputs[ApplicationModel.Level - 1].Contains(i) && o.transform.position.x < new Position(mapsize / 4, 0).ToWorldPos(tilesize, mapsize).x)
-            {
-                o.SetActive(true);
-            }
-            i++;
-        }
-
+        updateTimeLine();
         updateRotation();
 
         if (levelTimer > leveltime * speed)
@@ -289,5 +279,35 @@ public class Main : MonoBehaviour {
     private void updateRotation()
     {
         player.transform.rotation = Quaternion.Lerp(player.transform.rotation, Position.DirToRot(playerDir), 0.2f);
+    }
+
+    private void updateTimeLine()
+    {
+        foreach (GameObject o in timelineobjects)
+        {
+            o.transform.Translate(Vector3.down * speed * tilesize * Time.deltaTime / 100);
+            if (o.transform.position.y > 3 || o.transform.position.y < -3)
+            {
+                o.SetActive(false);
+            }
+            else
+            {
+                o.SetActive(true);
+            }
+        }
+        int i = 0;
+        foreach (GameObject o in timelineinputobjects)
+        {
+            o.transform.Translate(Vector3.down * speed * tilesize * Time.deltaTime / 100);
+            if (o.transform.position.y < -3)
+            {
+                o.SetActive(false);
+            }
+            else if (ApplicationModel.Inputs[ApplicationModel.Level - 1].Contains(i) && o.transform.position.y < -2)
+            {
+                o.SetActive(true);
+            }
+            i++;
+        }
     }
 }
