@@ -16,7 +16,7 @@ namespace Assets.Model
                 case "coin":
                     Type = CollectibleType.Coin;
                     break;
-                case "bigcoin":
+                case "bcoin":
                     Type = CollectibleType.BigCoin;
                     break;
                 case "malus":

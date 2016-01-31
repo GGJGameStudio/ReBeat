@@ -10,7 +10,7 @@ public class Main : MonoBehaviour {
     private int mapsize = 10;
     private int tilesize = 144;
     private float speed = 6;
-    private float leveltime = 42;
+    private float leveltime = 8;
 
     private GameObject player;
     private Position teleportPreviousPosition;
@@ -72,15 +72,13 @@ public class Main : MonoBehaviour {
                 ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Environment[i, j].GameObject = obj;
 
                 obj = null;
-                switch (ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Collectibles[i, j].Type)
+
+                if (ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Collectibles[i, j].Type != CollectibleType.Nothing)
                 {
-                    case CollectibleType.Coin:
-                        obj = (GameObject) Instantiate(Resources.Load("coin"), pos, Quaternion.identity);
-                        break;
-                    default:
-                        break;
+                    string colTex = "Collectibles/Prefabs/" + ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Collectibles[i, j].UnityResource;
+                    obj = (GameObject)Instantiate(Resources.Load(colTex), pos, Quaternion.identity);
+                    ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Collectibles[i, j].GameObject = obj;
                 }
-                ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Collectibles[i, j].GameObject = obj;
             }
         }
 
@@ -92,7 +90,9 @@ public class Main : MonoBehaviour {
         walking = true;
 
         Vector3 playerstartpos = startPos.ToWorldPos(tilesize, mapsize);
-        player = (GameObject) Instantiate(Resources.Load("sprite-triangle"), playerstartpos, Quaternion.identity);
+        player = (GameObject) Instantiate(Resources.Load("Player/Prefabs/penrose01"), playerstartpos, Quaternion.identity);
+        
+        
 
         var camera = GetComponent<Camera>();
         for (int l = 0; l < ApplicationModel.Level; l++)
@@ -228,6 +228,13 @@ public class Main : MonoBehaviour {
             if (ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Collectibles[nextPos.X, nextPos.Y].Type == CollectibleType.Coin)
             {
                 score += 10;
+                ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Collectibles[nextPos.X, nextPos.Y].Type = CollectibleType.Nothing;
+                Destroy(ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Collectibles[nextPos.X, nextPos.Y].GameObject);
+            }
+
+            if (ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Collectibles[nextPos.X, nextPos.Y].Type == CollectibleType.BigCoin)
+            {
+                score += 100;
                 ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Collectibles[nextPos.X, nextPos.Y].Type = CollectibleType.Nothing;
                 Destroy(ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Collectibles[nextPos.X, nextPos.Y].GameObject);
             }
