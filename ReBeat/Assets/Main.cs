@@ -252,6 +252,13 @@ public class Main : MonoBehaviour {
         {
             ApplicationModel.Level = 1;
             ApplicationModel.Inputs.Clear();
+            SceneManager.LoadScene(1);
+        }
+
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            ApplicationModel.Level = 1;
+            ApplicationModel.Inputs.Clear();
             SceneManager.LoadScene(0);
         }
 

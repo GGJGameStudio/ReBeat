@@ -43,7 +43,14 @@ public class MainMenuMain : MonoBehaviour {
                 KonamiIndex = 0;
             }
         }
-	}
+
+
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+    }
 
 
     public void IncrementWorld()
