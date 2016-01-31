@@ -14,7 +14,19 @@ namespace Assets.Model
             switch (UnityResource)
             {
                 case "floor00":
+                case "floor02":
+                case "floor03":
+                case "floor04":
                 case "floor05":
+                case "floor06":
+                case "floor07":
+                case "floor08":
+                case "floor09":
+                case "floor10":
+                case "floor11":
+                case "floor12":
+                case "floor13":
+                case "floor14":
                     Type = TileType.Wall;
                     break;
                 default:
