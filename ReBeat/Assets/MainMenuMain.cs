@@ -9,6 +9,7 @@ public class MainMenuMain : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        ApplicationModel.WorldList = new System.Collections.Generic.Dictionary<int, int>();
         string worldDetail = ((TextAsset)Resources.Load("Worlds/WorldList")).text;
         string[] worldDetailTab = worldDetail.Split('\n');
         foreach(string detail in worldDetailTab)
