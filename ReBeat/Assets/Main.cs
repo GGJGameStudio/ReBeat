@@ -102,6 +102,7 @@ public class Main : MonoBehaviour {
         {
             player = (GameObject)Instantiate(Resources.Load("Player/Prefabs/caramel_0"), playerstartpos, Quaternion.identity);
             player.transform.localScale = new Vector3(3 * (float)tilesize / resourcetilesize, 3 * (float)tilesize / resourcetilesize);
+                ApplicationModel.PlaySecretStuff();
         } else
         {
             player = (GameObject)Instantiate(Resources.Load("Player/Prefabs/penrose01"), playerstartpos, Quaternion.identity);
@@ -398,4 +399,5 @@ public class Main : MonoBehaviour {
             i++;
         }
     }
+
 }

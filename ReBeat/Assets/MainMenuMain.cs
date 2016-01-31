@@ -22,9 +22,10 @@ public class MainMenuMain : MonoBehaviour {
             ApplicationModel.WorldList.Add(Int32.Parse(detailTab[0]), Int32.Parse(detailTab[1]));
         }
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+
+    // Update is called once per frame
+    void Update () {
         if (Input.anyKeyDown)
         {
             if (Input.GetKeyDown(KonamiCodeSequence[KonamiIndex]))
