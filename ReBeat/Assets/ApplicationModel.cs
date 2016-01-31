@@ -20,4 +20,6 @@ class ApplicationModel
     static public int MapsetNumber = 1;
 
     static public Dictionary<int, int> WorldList = new Dictionary<int, int>();
+
+    static public bool KonamiCodeActivated = false;
 }

@@ -182,6 +182,7 @@ public class Main : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            
             int timeSlot = Mathf.CeilToInt(levelTimer);
             if (timeSlot - levelTimer < tolerance && levelTimer > 0 && levelTimer < leveltime * speed)
             {

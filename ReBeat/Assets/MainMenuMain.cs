@@ -5,10 +5,14 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuMain : MonoBehaviour {
 
-
+    KeyCode[] KonamiCodeSequence = new KeyCode[] { KeyCode.UpArrow, KeyCode.UpArrow, KeyCode.DownArrow, KeyCode.DownArrow, KeyCode.LeftArrow, KeyCode.RightArrow, KeyCode.LeftArrow, KeyCode.RightArrow, KeyCode.B, KeyCode.A };
+    int KonamiIndex = 0;
+    
 
 	// Use this for initialization
 	void Start () {
+        ApplicationModel.KonamiCodeActivated = false;
+        KonamiIndex = 0;
         ApplicationModel.WorldList = new System.Collections.Generic.Dictionary<int, int>();
         string worldDetail = ((TextAsset)Resources.Load("Worlds/WorldList")).text;
         string[] worldDetailTab = worldDetail.Split('\n');
@@ -21,7 +25,23 @@ public class MainMenuMain : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+        if (Input.anyKeyDown)
+        {
+            if (Input.GetKeyDown(KonamiCodeSequence[KonamiIndex]))
+            {
+                KonamiIndex++;
+                if(KonamiIndex >= KonamiCodeSequence.Length)
+                {
+                    ApplicationModel.KonamiCodeActivated = !ApplicationModel.KonamiCodeActivated;
+                    KonamiIndex = 0;
+                    StartGame();
+                }
+            }
+            else
+            {
+                KonamiIndex = 0;
+            }
+        }
 	}
 
 
