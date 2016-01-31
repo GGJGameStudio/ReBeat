@@ -324,7 +324,7 @@ public class Main : MonoBehaviour {
             {
                 ApplicationModel.Level = 1;
                 ApplicationModel.Inputs.Clear();
-                SceneManager.LoadScene(0);
+                SceneManager.LoadScene(2);
             }
             else
             {
