@@ -4,13 +4,16 @@ using System.Collections.Generic;
 using System.Collections;
 using SimpleJSON;
 using Assets.Model;
+using UnityEngine.UI;
 
 public class Main : MonoBehaviour {
 
     private int mapsize = 10;
-    private int tilesize = 144;
-    private float speed = 6;
+    private int resourcetilesize = 144;
+    private int tilesize = 48;
+    private float speed = 4;
     private float leveltime = 42;
+    private float tolerance = 1f;
 
     private GameObject player;
     private Position teleportPreviousPosition;
@@ -26,6 +29,13 @@ public class Main : MonoBehaviour {
     private List<GameObject> timelineinputobjects = new List<GameObject>();
 
     public int score = 0;
+
+    private int uiOffsetX = 8;
+    private int uiOffsetY = 3;
+    private int uiOffsetPlayerY = -2;
+    private int uiSizeY = 3;
+
+    public GameObject textUI;
 
 
     // Use this for initialization
@@ -69,6 +79,7 @@ public class Main : MonoBehaviour {
                 string envTex = "Environment/Prefabs/" + ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Environment[i, j].UnityResource;
 
                 obj = (GameObject)Instantiate(Resources.Load(envTex), pos, Quaternion.identity);
+                obj.transform.localScale = new Vector3((float)tilesize / resourcetilesize, (float)tilesize / resourcetilesize);
                 ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Environment[i, j].GameObject = obj;
 
                 obj = null;
@@ -93,14 +104,15 @@ public class Main : MonoBehaviour {
 
         Vector3 playerstartpos = startPos.ToWorldPos(tilesize, mapsize);
         player = (GameObject) Instantiate(Resources.Load("sprite-triangle"), playerstartpos, Quaternion.identity);
+        player.transform.localScale = new Vector3((float)tilesize / resourcetilesize, (float)tilesize / resourcetilesize);
 
         var camera = GetComponent<Camera>();
         for (int l = 0; l < ApplicationModel.Level; l++)
         {
-            Vector3 timelinepos = new Vector3(5 + l, 0, 0);
+            Vector3 timelinepos = new Vector3(uiOffsetX + l, uiOffsetY, 0);
             var timeline = (GameObject)Instantiate(Resources.Load("Timeline/prefab/timeline"), timelinepos, Quaternion.identity);
             
-            var timeBasePosition = new Vector3(5 + l, -2, 0);
+            var timeBasePosition = new Vector3(uiOffsetX + l, uiOffsetY + uiOffsetPlayerY, 0);
             var basetime = (GameObject)Instantiate(Resources.Load("Timeline/prefab/player"), timeBasePosition, Quaternion.identity);
 
             for (int t = 0; t <= leveltime * speed; t++)
@@ -132,7 +144,7 @@ public class Main : MonoBehaviour {
         {
             foreach (int input in levelinputs)
             {
-                var timeBasePosition = new Vector3(5 + level, -2, 0);
+                var timeBasePosition = new Vector3(uiOffsetX + level, uiOffsetY + uiOffsetPlayerY, 0);
 
                 var timelineobjectpos = timeBasePosition + Vector3.up * input * tilesize / 100;
                 GameObject timelineobject = (GameObject)Instantiate(Resources.Load("Timeline/prefab/input"), timelineobjectpos, Quaternion.identity);
@@ -141,6 +153,13 @@ public class Main : MonoBehaviour {
 
             level++;
         }
+
+        Text scoreText = textUI.AddComponent<Text>();
+        scoreText.text = score.ToString();
+        Font ArialFont = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf");
+        scoreText.font = ArialFont;
+        scoreText.fontSize = 30;
+        scoreText.material = ArialFont.material;
 
     }
 	
@@ -153,8 +172,11 @@ public class Main : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            int nextTimeSlot = Mathf.CeilToInt(levelTimer);
-            ApplicationModel.Inputs[ApplicationModel.Level-1].Add(nextTimeSlot);
+            int timeSlot = Mathf.CeilToInt(levelTimer);
+            if (timeSlot - levelTimer < tolerance)
+            {
+                ApplicationModel.Inputs[ApplicationModel.Level - 1].Add(timeSlot);
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.Backspace))
@@ -242,6 +264,8 @@ public class Main : MonoBehaviour {
         updateTimeLine();
         updateRotation();
 
+        textUI.GetComponent<Text>().text = score.ToString();
+
         if (levelTimer > leveltime * speed)
         {
             ApplicationModel.Level++;
@@ -286,7 +310,7 @@ public class Main : MonoBehaviour {
         foreach (GameObject o in timelineobjects)
         {
             o.transform.Translate(Vector3.down * speed * tilesize * Time.deltaTime / 100);
-            if (o.transform.position.y > 3 || o.transform.position.y < -3)
+            if (o.transform.position.y > uiOffsetY + uiSizeY || o.transform.position.y < uiOffsetY - uiSizeY)
             {
                 o.SetActive(false);
             }
@@ -299,11 +323,11 @@ public class Main : MonoBehaviour {
         foreach (GameObject o in timelineinputobjects)
         {
             o.transform.Translate(Vector3.down * speed * tilesize * Time.deltaTime / 100);
-            if (o.transform.position.y < -3)
+            if (o.transform.position.y < uiOffsetY - uiSizeY)
             {
                 o.SetActive(false);
             }
-            else if (ApplicationModel.Inputs[ApplicationModel.Level - 1].Contains(i) && o.transform.position.y < -2)
+            else if (ApplicationModel.Inputs[ApplicationModel.Level - 1].Contains(i) && o.transform.position.y < uiOffsetY + uiOffsetY - uiOffsetPlayerY)
             {
                 o.SetActive(true);
             }
