@@ -102,6 +102,11 @@ public class Main : MonoBehaviour {
         {
             player = (GameObject)Instantiate(Resources.Load("Player/Prefabs/caramel_0"), playerstartpos, Quaternion.identity);
             player.transform.localScale = new Vector3(3 * (float)tilesize / resourcetilesize, 3 * (float)tilesize / resourcetilesize);
+
+            GameObject background = (GameObject)Instantiate(Resources.Load("Player/Prefabs/karamel_0"), Vector3.zero, Quaternion.identity);
+            background.transform.localScale = new Vector3(10f, 10f, 1);
+            background.GetComponent<SpriteRenderer>().sortingOrder = -1;
+
         } else
         {
             player = (GameObject)Instantiate(Resources.Load("Player/Prefabs/penrose01"), playerstartpos, Quaternion.identity);
