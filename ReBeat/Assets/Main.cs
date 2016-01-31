@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public class Main : MonoBehaviour {
 
-    private int mapsize = 10;
+    private int mapsize = 20;
     private int resourcetilesize = 144;
     private int tilesize = 48;
     private float speed = 4;
@@ -31,10 +31,11 @@ public class Main : MonoBehaviour {
     private List<GameObject> timelineinputobjects = new List<GameObject>();
     
 
-    private int uiOffsetX = 8;
-    private int uiOffsetY = 3;
-    private int uiOffsetPlayerY = -2;
-    private int uiSizeY = 3;
+    private float uiOffsetX = 5.25f;
+    private float uiOffsetY = 0.25f;
+    private float uiOffsetPlayerY = -2;
+    private float uiSizeY = 3;
+    private float uiGapX = 0.75f;
 
     public GameObject textUI;
 
@@ -101,10 +102,10 @@ public class Main : MonoBehaviour {
         var camera = GetComponent<Camera>();
         for (int l = 0; l < ApplicationModel.Level; l++)
         {
-            Vector3 timelinepos = new Vector3(uiOffsetX + l, uiOffsetY, 0);
+            Vector3 timelinepos = new Vector3(uiOffsetX + l * uiGapX, uiOffsetY, 0);
             var timeline = (GameObject)Instantiate(Resources.Load("Timeline/prefab/timeline"), timelinepos, Quaternion.identity);
             
-            var timeBasePosition = new Vector3(uiOffsetX + l, uiOffsetY + uiOffsetPlayerY, 0);
+            var timeBasePosition = new Vector3(uiOffsetX + l * uiGapX, uiOffsetY + uiOffsetPlayerY, 0);
             var basetime = (GameObject)Instantiate(Resources.Load("Timeline/prefab/player"), timeBasePosition, Quaternion.identity);
 
             for (int t = -(int)levelTimer; t <= -levelTimer + leveltime * speed; t++)
@@ -137,7 +138,7 @@ public class Main : MonoBehaviour {
         {
             foreach (int input in levelinputs)
             {
-                var timeBasePosition = new Vector3(uiOffsetX + level, uiOffsetY + uiOffsetPlayerY, 0);
+                var timeBasePosition = new Vector3(uiOffsetX + level * uiGapX, uiOffsetY + uiOffsetPlayerY, 0);
 
                 var timelineobjectpos = timeBasePosition + Vector3.up * (-levelTimer + input) * tilesize / 100;
                 GameObject timelineobject = (GameObject)Instantiate(Resources.Load("Timeline/prefab/input"), timelineobjectpos, Quaternion.identity);
