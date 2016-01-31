@@ -68,7 +68,9 @@ namespace Assets.Model
                 String[] metaData = name.Split('_');
                 int index = Int32.Parse(metaData[0]);
                 String type = metaData[1];
-
+                String additionalParam = "";
+                if (metaData.Length > 2)
+                    additionalParam = metaData[2];
                 Level lvl;
                 if (levels.ContainsKey(index))
                 {
@@ -83,7 +85,7 @@ namespace Assets.Model
 
                 if (type == "E")
                 {
-                    String mechanic = node["properties"]["Mechanic"].Value;
+                    String mechanic = additionalParam;
                     LevelMechanic mech;
                     switch (mechanic)
                     {
@@ -100,7 +102,7 @@ namespace Assets.Model
                 }
                 else if (type == "C")
                 {
-                    String direction = node["properties"]["StartDirection"].Value;
+                    String direction = additionalParam;
                     Direction dir;
                     switch (direction)
                     {
