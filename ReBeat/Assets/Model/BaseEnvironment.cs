@@ -13,7 +13,7 @@ namespace Assets.Model
         {
             switch (UnityResource)
             {
-                case "wall":
+                case "floor00":
                     Type = TileType.Wall;
                     break;
                 default:

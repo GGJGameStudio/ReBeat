@@ -8,9 +8,9 @@ using Assets.Model;
 public class Main : MonoBehaviour {
 
     private int mapsize = 10;
-    private int tilesize = 32;
-    private float speed = 5;
-    private float leveltime = 6;
+    private int tilesize = 144;
+    private float speed = 6;
+    private float leveltime = 42;
 
     private GameObject player;
     private Position teleportPreviousPosition;
@@ -55,7 +55,7 @@ public class Main : MonoBehaviour {
             {
                 Vector3 pos = new Position(i, j).ToWorldPos(tilesize, mapsize);
                 GameObject obj = null;
-                switch (ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Environment[i, j].Type)
+                /*switch (ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Environment[i, j].Type)
                 {
                     case TileType.Blank:
                         obj = (GameObject) Instantiate(Resources.Load("blanc"), pos, Quaternion.identity);
@@ -65,7 +65,10 @@ public class Main : MonoBehaviour {
                         break;
                     default:
                         break;
-                }
+                }*/
+                string envTex = "Environment/Prefabs/" + ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Environment[i, j].UnityResource;
+
+                obj = (GameObject)Instantiate(Resources.Load(envTex), pos, Quaternion.identity);
                 ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Environment[i, j].GameObject = obj;
 
                 obj = null;
@@ -90,7 +93,6 @@ public class Main : MonoBehaviour {
 
         Vector3 playerstartpos = startPos.ToWorldPos(tilesize, mapsize);
         player = (GameObject) Instantiate(Resources.Load("sprite-triangle"), playerstartpos, Quaternion.identity);
-        player.transform.localScale = new Vector3(0.3f, 0.3f, 1);
 
         var camera = GetComponent<Camera>();
         for (int l = 0; l < ApplicationModel.Level; l++)
@@ -121,8 +123,8 @@ public class Main : MonoBehaviour {
                     GameObject timelineInputobject = (GameObject)Instantiate(Resources.Load("Timeline/prefab/input"), timelineobjectpos, Quaternion.identity);
                     timelineinputobjects.Add(timelineInputobject);
                     timelineInputobject.SetActive(false);
-                }
             }
+        }
         }
 
         int level = 0;
@@ -273,7 +275,7 @@ public class Main : MonoBehaviour {
         BaseEnvironment[,] env = ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Environment;
         return new Position((position.X + env.GetLength(0)) % env.GetLength(0), (position.Y + env.GetLength(1)) % env.GetLength(1));
     }
-        
+
     private void updateRotation()
     {
         player.transform.rotation = Quaternion.Lerp(player.transform.rotation, Position.DirToRot(playerDir), 0.2f);
