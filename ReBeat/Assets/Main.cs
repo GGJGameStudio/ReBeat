@@ -11,8 +11,8 @@ public class Main : MonoBehaviour {
     private int mapsize = 20;
     private int resourcetilesize = 144;
     private int tilesize = 48;
-    private float speed = 4;
-    private float leveltime = 8;
+    private float speed = 3;
+    private float leveltime = 12;
     private float tolerance = 1f;
     private float startDelay = 2;
     private float endLevelDelay = 1f;
@@ -35,7 +35,7 @@ public class Main : MonoBehaviour {
     private float uiOffsetY = 0.25f;
     private float uiOffsetPlayerY = -2;
     private float uiSizeY = 3;
-    private float uiGapX = 0.75f;
+    private float uiGapXBase = 3f;
 
     public GameObject textUI;
 
@@ -50,7 +50,7 @@ public class Main : MonoBehaviour {
         //charger map
         if (ApplicationModel.Level == 1)
         {
-            ApplicationModel.Mapset = JSONParser.Parse(((TextAsset)Resources.Load("Worlds/2/Set_1")).text);
+            ApplicationModel.Mapset = JSONParser.Parse(((TextAsset)Resources.Load("Worlds/1/Set_5")).text);
             ApplicationModel.Score = 0;
         }
 
@@ -104,10 +104,10 @@ public class Main : MonoBehaviour {
         var camera = GetComponent<Camera>();
         for (int l = 0; l < ApplicationModel.Level; l++)
         {
-            Vector3 timelinepos = new Vector3(uiOffsetX + l * uiGapX, uiOffsetY, 0);
+            Vector3 timelinepos = new Vector3(uiOffsetX + l * uiGapXBase / (ApplicationModel.Level + 1), uiOffsetY, 0);
             var timeline = (GameObject)Instantiate(Resources.Load("Timeline/prefab/timeline"), timelinepos, Quaternion.identity);
             
-            var timeBasePosition = new Vector3(uiOffsetX + l * uiGapX, uiOffsetY + uiOffsetPlayerY, 0);
+            var timeBasePosition = new Vector3(uiOffsetX + l * uiGapXBase / (ApplicationModel.Level + 1), uiOffsetY + uiOffsetPlayerY, 0);
             var basetime = (GameObject)Instantiate(Resources.Load("Timeline/prefab/player"), timeBasePosition, Quaternion.identity);
 
             for (int t = -(int)levelTimer; t <= -levelTimer + leveltime * speed; t++)
@@ -140,7 +140,7 @@ public class Main : MonoBehaviour {
         {
             foreach (int input in levelinputs)
             {
-                var timeBasePosition = new Vector3(uiOffsetX + level * uiGapX, uiOffsetY + uiOffsetPlayerY, 0);
+                var timeBasePosition = new Vector3(uiOffsetX + level * uiGapXBase / (ApplicationModel.Level + 1), uiOffsetY + uiOffsetPlayerY, 0);
 
                 var timelineobjectpos = timeBasePosition + Vector3.up * (-levelTimer + input) * tilesize / 100;
                 GameObject timelineobject = (GameObject)Instantiate(Resources.Load("Timeline/prefab/input"), timelineobjectpos, Quaternion.identity);
