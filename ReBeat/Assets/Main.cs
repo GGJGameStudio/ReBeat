@@ -50,7 +50,7 @@ public class Main : MonoBehaviour {
         //charger map
         if (ApplicationModel.Level == 1)
         {
-            ApplicationModel.Mapset = JSONParser.Parse(((TextAsset)Resources.Load("Worlds/1/Set_3")).text);
+            ApplicationModel.Mapset = JSONParser.Parse(((TextAsset)Resources.Load("Worlds/" + ApplicationModel.World + "/Set_" + ApplicationModel.MapsetNumber)).text);
             ApplicationModel.Score = 0;
         }
 
@@ -307,9 +307,13 @@ public class Main : MonoBehaviour {
 
         if (levelTimer > leveltime * speed && player.activeSelf)
         {
+
+            AudioSource audio = GetComponent<AudioSource>();
+            AudioClip clip = (AudioClip)Resources.Load("Sound/Gewonnen");
+            audio.PlayOneShot(clip);
             GameObject animation = (GameObject)Instantiate(Resources.Load("Player/Prefabs/explo_0"), player.transform.position, Quaternion.identity);
-            animation.transform.localScale = new Vector3((float)tilesize / resourcetilesize, (float)tilesize / resourcetilesize);
-            Destroy(animation, 0.5f);
+            animation.transform.localScale = new Vector3(0.6f * tilesize / resourcetilesize, 0.6f * tilesize / resourcetilesize);
+            Destroy(animation, 0.3f);
             player.SetActive(false);
         }
 
@@ -320,8 +324,12 @@ public class Main : MonoBehaviour {
             {
                 ApplicationModel.Level = 1;
                 ApplicationModel.Inputs.Clear();
+                SceneManager.LoadScene(0);
             }
-            SceneManager.LoadScene(0);
+            else
+            {
+                SceneManager.LoadScene(1);
+            }
         }
     }
 

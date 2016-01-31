@@ -14,4 +14,10 @@ class ApplicationModel
     static public Mapset Mapset;
 
     static public int Score = 0;
+
+    static public int World = 1;
+
+    static public int MapsetNumber = 1;
+
+    static public Dictionary<int, int> WorldList = new Dictionary<int, int>();
 }
