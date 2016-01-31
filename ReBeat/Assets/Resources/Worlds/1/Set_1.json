@@ -28,7 +28,7 @@
          "name":"2_E_TurnR",
          "opacity":1,
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":20,
          "x":0,
          "y":0
@@ -39,7 +39,7 @@
          "name":"2_C_R",
          "opacity":1,
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":20,
          "x":0,
          "y":0
