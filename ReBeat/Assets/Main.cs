@@ -5,6 +5,7 @@ using System.Collections;
 using SimpleJSON;
 using Assets.Model;
 using UnityEngine.UI;
+using System;
 
 public class Main : MonoBehaviour {
 
@@ -44,16 +45,38 @@ public class Main : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
-        moveTimer = -speed * startDelay;
-        levelTimer = -speed * startDelay;
         wololo = false;
         //charger map
         if (ApplicationModel.Level == 1)
         {
             ApplicationModel.Mapset = JSONParser.Parse(((TextAsset)Resources.Load("Worlds/" + ApplicationModel.World + "/Set_" + ApplicationModel.MapsetNumber)).text);
+
+            try
+            {
+                string cfg = ((TextAsset)Resources.Load("Worlds/" + ApplicationModel.World + "/SetCfg_" + ApplicationModel.MapsetNumber)).text;
+                String[] cfgTab = cfg.Split(';');
+
+                float BPM = float.Parse(cfgTab[0]);
+                float cases = float.Parse(cfgTab[1]);
+
+                if (ApplicationModel.KonamiCodeActivated)
+                    BPM = 164.74f;
+
+                speed = BPM / 60f;
+                leveltime = cases / speed;
+
+            }
+            catch (Exception)
+            {
+
+            }
+
             ApplicationModel.Score = 0;
         }
 
+
+        moveTimer = -speed * startDelay;
+        levelTimer = -speed * startDelay;
 
         Position startPos = new Position(ApplicationModel.Mapset.Levels[ApplicationModel.Level-1].StartX, ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].StartY);
         Direction startDir = ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].StartDirection;
