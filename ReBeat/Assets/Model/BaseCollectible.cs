@@ -22,6 +22,9 @@ namespace Assets.Model
                 case "malus":
                     Type = CollectibleType.Malus;
                     break;
+                case "penrose01":
+                    Type = CollectibleType.StartPosition;
+                    break;
                 default:
                     Type = CollectibleType.Nothing;
                     break;
@@ -50,6 +53,7 @@ namespace Assets.Model
         Nothing,
         Coin,
         BigCoin,
-        Malus
+        Malus,
+        StartPosition
     }
 }

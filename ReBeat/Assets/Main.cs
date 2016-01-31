@@ -48,7 +48,7 @@ public class Main : MonoBehaviour {
         //charger map
         if (ApplicationModel.Level == 1)
         {
-            ApplicationModel.Mapset = JSONParser.Parse(((TextAsset)Resources.Load("Worlds/1/Set_1")).text);
+            ApplicationModel.Mapset = JSONParser.Parse(((TextAsset)Resources.Load("Worlds/2/Set_1")).text);
             ApplicationModel.Score = 0;
         }
 
@@ -78,7 +78,7 @@ public class Main : MonoBehaviour {
 
                 obj = null;
 
-                if (ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Collectibles[i, j].Type != CollectibleType.Nothing)
+                if (ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Collectibles[i, j].Type != CollectibleType.Nothing && ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Collectibles[i, j].Type != CollectibleType.StartPosition)
                 {
                     string colTex = "Collectibles/Prefabs/" + ApplicationModel.Mapset.Levels[ApplicationModel.Level - 1].Collectibles[i, j].UnityResource;
                     obj = (GameObject)Instantiate(Resources.Load(colTex), pos, Quaternion.identity);

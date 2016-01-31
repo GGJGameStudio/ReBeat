@@ -127,7 +127,7 @@ namespace Assets.Model
                         {
                             lvl.Collectibles[i, j] = tileSet.CollectibleSet[tileKey].Clone();
 
-                            if (lvl.Collectibles[i, j].UnityResource == "START")
+                            if (lvl.Collectibles[i, j].Type == CollectibleType.StartPosition)
                             {
                                 lvl.StartX = i;
                                 lvl.StartY = j;
