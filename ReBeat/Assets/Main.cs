@@ -98,8 +98,16 @@ public class Main : MonoBehaviour {
         walking = true;
 
         Vector3 playerstartpos = startPos.ToWorldPos(tilesize, mapsize);
-        player = (GameObject) Instantiate(Resources.Load("Player/Prefabs/caramel_0"), playerstartpos, Quaternion.identity);
-        player.transform.localScale = new Vector3((float)tilesize / resourcetilesize, (float)tilesize / resourcetilesize);
+        if (ApplicationModel.KonamiCodeActivated)
+        {
+            player = (GameObject)Instantiate(Resources.Load("Player/Prefabs/caramel_0"), playerstartpos, Quaternion.identity);
+            player.transform.localScale = new Vector3(3 * (float)tilesize / resourcetilesize, 3 * (float)tilesize / resourcetilesize);
+        } else
+        {
+            player = (GameObject)Instantiate(Resources.Load("Player/Prefabs/penrose01"), playerstartpos, Quaternion.identity);
+            player.transform.localScale = new Vector3((float)tilesize / resourcetilesize, (float)tilesize / resourcetilesize);
+        }
+        
         
         var camera = GetComponent<Camera>();
         for (int l = 0; l < ApplicationModel.Level; l++)
