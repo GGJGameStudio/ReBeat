@@ -159,6 +159,7 @@ public class Main : MonoBehaviour {
         scoreText.font = ArialFont;
         scoreText.fontSize = 30;
         scoreText.material = ArialFont.material;
+        textUI.transform.position = new Vector3(uiOffsetX + 6, uiOffsetY + uiOffsetPlayerY - 5, 0);
 
     }
 	
