@@ -15,7 +15,7 @@ public class Main : MonoBehaviour {
     private float leveltime = 8;
     private float tolerance = 1f;
     private float startDelay = 2;
-    private float explosionTime = 1;
+    private float endLevelDelay = 1f;
 
     private GameObject player;
     private Position teleportPreviousPosition;
@@ -168,7 +168,7 @@ public class Main : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Space))
         {
             int timeSlot = Mathf.CeilToInt(levelTimer);
-            if (timeSlot - levelTimer < tolerance && levelTimer > 0)
+            if (timeSlot - levelTimer < tolerance && levelTimer > 0 && levelTimer < leveltime * speed)
             {
                 ApplicationModel.Inputs[ApplicationModel.Level - 1].Add(timeSlot);
             }
@@ -268,7 +268,15 @@ public class Main : MonoBehaviour {
 
         textUI.GetComponent<Text>().text = ApplicationModel.Score.ToString();
 
-        if (levelTimer > leveltime * speed)
+        if (levelTimer > leveltime * speed && player.activeSelf)
+        {
+            GameObject animation = (GameObject)Instantiate(Resources.Load("Player/Prefabs/explo_0"), player.transform.position, Quaternion.identity);
+            animation.transform.localScale = new Vector3((float)tilesize / resourcetilesize, (float)tilesize / resourcetilesize);
+            Destroy(animation, 0.5f);
+            player.SetActive(false);
+        }
+
+        if (levelTimer > (leveltime + endLevelDelay ) * speed )
         {
             ApplicationModel.Level++;
             if (ApplicationModel.Level > ApplicationModel.Mapset.Levels.Length)
