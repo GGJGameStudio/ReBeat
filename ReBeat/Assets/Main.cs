@@ -39,12 +39,14 @@ public class Main : MonoBehaviour {
 
     public GameObject textUI;
 
+    private bool wololo = false;
 
     // Use this for initialization
     void Start ()
     {
         moveTimer = -speed * startDelay;
         levelTimer = -speed * startDelay;
+        wololo = false;
         //charger map
         if (ApplicationModel.Level == 1)
         {
@@ -162,6 +164,19 @@ public class Main : MonoBehaviour {
 	void Update () {
         moveTimer += Time.deltaTime * speed;
         levelTimer += Time.deltaTime * speed;
+
+        if (!wololo && levelTimer > 0)
+        {
+            wololo = true;
+
+            AudioSource audio = GetComponent<AudioSource>();
+            AudioClip clip = (AudioClip)Resources.Load("Sound/wololo");
+            if (clip != null)
+            {
+                audio.PlayOneShot(clip);
+            }
+
+        }
 
         player.transform.position = Vector3.Lerp(playerPos.ToWorldPos(tilesize, mapsize), nextPos.ToWorldPos(tilesize, mapsize), moveTimer);
 
